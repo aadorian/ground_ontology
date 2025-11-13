@@ -197,7 +197,7 @@
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Method">
         <rdfs:label>Method</rdfs:label>
-        <rdfs:comment>Research method applied by the researcher</rdfs:comment>
+        <rdfs:comment>Theoretical Sampling (Guiding Principle): A process which allows the researcher to collect, code, and analyze the data and then decide what data to collect next.</rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Interview">
@@ -260,34 +260,40 @@
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Interpretation">
         <rdfs:label>Interpretation</rdfs:label>
-        <rdfs:comment>Interpretation of records in the consensus phase</rdfs:comment>
+        <rdfs:comment>Memoing: The ongoing process of writing theoretical notes throughout the GT process. Memos capture the conceptual links between categories as the researcher notes down their reflections on different categories.</rdfs:comment>
     </owl:Class>
     
     <!-- Finding Phase -->
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Report">
         <rdfs:label>Report</rdfs:label>
-        <rdfs:comment>Research report in the finding phase</rdfs:comment>
+        <rdfs:comment>Write-up: The final step in GT is writing up the theory, which follows the theoretical outline generated as a result of sorting and theoretical coding.</rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#GroundedTheory">
         <rdfs:label>Grounded Theory</rdfs:label>
-        <rdfs:comment>Grounded theory reported in the findings</rdfs:comment>
+        <rdfs:comment>Theoretical Sampling (Best Process Match): A process which allows the researcher to collect, code, and analyze the data and then decide what data to collect next.</rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory">
         <rdfs:label>Analytic Category</rdfs:label>
-        <rdfs:comment>Analytic category elaborated from grounded theory</rdfs:comment>
+        <rdfs:comment>Category: The next level of abstraction produced as a result of applying constant comparison on concepts.</rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory">
         <rdfs:label>Descriptive Category</rdfs:label>
-        <rdfs:comment>Descriptive category elaborated from analytic category</rdfs:comment>
+        <rdfs:comment>Category: The next level of abstraction produced as a result of applying constant comparison on concepts.</rdfs:comment>
     </owl:Class>
     
     <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Code">
         <rdfs:label>Code</rdfs:label>
-        <rdfs:comment>Code elaborated from descriptive category or directly from interpretation</rdfs:comment>
+        <rdfs:comment>A phrase that summarizes the main points in 2 or 3 words.</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#CoreCategory">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:label>Core Category</rdfs:label>
+        <rdfs:comment>Several categories emerge as a result of data analysis and the one that is able to account for most variations in the data and relates meaningfully and easily with other categories is called the Core Category (Glaser 1978).</rdfs:comment>
     </owl:Class>
     
 </rdf:RDF>
