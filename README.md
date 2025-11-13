@@ -1,5 +1,36 @@
 # Ground Ontology
 
+A Protege ontology project modeling qualitative research methodology structured into four main phases: Project Formulation, Data Collection, Consensus, and Finding.
+
+## Ontology Overview
+
+The `grounded_research_ontology.owl` file contains a comprehensive ontology representing the cyclical and interconnected process of conducting grounded theory research. The ontology includes:
+
+- **25 Classes** organized across 4 research phases
+- **22 Object Properties** defining relationships between concepts
+- **Hierarchical structures** from Grounded Theory to Codes
+- **Cyclical relationships** supporting iterative research processes
+
+### Research Phases
+
+1. **Project Formulation**: Research objectives, theoretical frameworks, researchers, methods
+2. **Data Collection**: Bibliographies, subjects/objects, records (interviews, field notes, documents)
+3. **Consensus**: Reflexivity, interpretation, method application
+4. **Finding**: Reports, grounded theory, analytic categories, descriptive categories, codes
+
+## Quick Start
+
+1. Open `grounded_research_ontology.owl` in Protege
+2. See `PROTEGE_SETUP.md` for detailed setup instructions
+3. Read `ONTOLOGY_DOCUMENTATION.md` for complete ontology documentation
+
+## Files
+
+- `grounded_research_ontology.owl` - Main OWL ontology file
+- `ONTOLOGY_DOCUMENTATION.md` - Detailed ontology documentation
+- `PROTEGE_SETUP.md` - Protege setup and usage instructions
+- `.gitmessage` - Commit message template for conventional commits
+
 ## Conventional Commits
 
 This repository follows the [Conventional Commits](https://www.conventionalcommits.org/) specification.

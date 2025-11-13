@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/grounded_research_ontology#"
+     xml:base="http://www.semanticweb.org/grounded_research_ontology"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/grounded_research_ontology"/>
+    
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasObjective">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchProject"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchObjective"/>
+        <rdfs:label>hasObjective</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasTheoreticalFramework">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchProject"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#TheoreticalFramework"/>
+        <rdfs:label>hasTheoreticalFramework</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasResearcher">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchProject"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Researcher"/>
+        <rdfs:label>hasResearcher</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#selects">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Researcher"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#FieldOfStudy"/>
+        <rdfs:label>selects</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#appliesMethod">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Researcher"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Method"/>
+        <rdfs:label>appliesMethod</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#poses">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchObjective"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchQuestion"/>
+        <rdfs:label>poses</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasSubjectObjectApplication">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#FieldOfStudy"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#SubjectObject"/>
+        <rdfs:label>hasSubjectObjectApplication</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#isReformulated">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchQuestion"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Reflexivity"/>
+        <rdfs:label>isReformulated</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#refersTo">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Bibliography"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:label>refersTo</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasSubjectObjects">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#SubjectObject"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:label>hasSubjectObjects</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#isInterpreted">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Interpretation"/>
+        <rdfs:label>isInterpreted</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#isApplied">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#SubjectObject"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#MethodOverSubjectObject"/>
+        <rdfs:label>isApplied</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#toReformulation">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Reflexivity"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#ResearchQuestion"/>
+        <rdfs:label>toReformulation</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#giveResponseTo">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Reflexivity"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Report"/>
+        <rdfs:label>giveResponseTo</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasRelatedWork">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Reflexivity"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Report"/>
+        <rdfs:label>hasRelatedWork</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasMethodology">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Reflexivity"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Report"/>
+        <rdfs:label>hasMethodology</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasCodes">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Interpretation"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Code"/>
+        <rdfs:label>hasCodes</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#isReported">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Report"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#GroundedTheory"/>
+        <rdfs:label>isReported</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasElaboratedTheory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#GroundedTheory"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:label>hasElaboratedTheory</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasRelativeAnalyticCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:label>hasRelativeAnalyticCategory</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasElaboratedAnalyticCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory"/>
+        <rdfs:label>hasElaboratedAnalyticCategory</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasRelatedDescriptiveCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory"/>
+        <rdfs:label>hasRelatedDescriptiveCategory</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasElaboratedDescriptiveCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Code"/>
+        <rdfs:label>hasElaboratedDescriptiveCategory</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/grounded_research_ontology#hasRelatedCode">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Code"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Code"/>
+        <rdfs:label>hasRelatedCode</rdfs:label>
+    </owl:ObjectProperty>
+    
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+    
+    <!-- Project Formulation Phase -->
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#ResearchProject">
+        <rdfs:label>Research Project</rdfs:label>
+        <rdfs:comment>Central concept representing a research project in the formulation phase</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#ResearchObjective">
+        <rdfs:label>Research Objective</rdfs:label>
+        <rdfs:comment>Objective of the research project</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#TheoreticalFramework">
+        <rdfs:label>Theoretical Framework</rdfs:label>
+        <rdfs:comment>Theoretical framework used in the research project</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Researcher">
+        <rdfs:label>Researcher</rdfs:label>
+        <rdfs:comment>Person conducting the research</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#FieldOfStudy">
+        <rdfs:label>Field Of Study</rdfs:label>
+        <rdfs:comment>Field or domain of study selected by the researcher</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Method">
+        <rdfs:label>Method</rdfs:label>
+        <rdfs:comment>Research method applied by the researcher</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Interview">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Method"/>
+        <rdfs:label>Interview</rdfs:label>
+        <rdfs:comment>Interview as a specific research method</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#ResearchQuestion">
+        <rdfs:label>Research Question</rdfs:label>
+        <rdfs:comment>Research question posed by the research objective</rdfs:comment>
+    </owl:Class>
+    
+    <!-- Data Collection Phase -->
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Bibliography">
+        <rdfs:label>Bibliography</rdfs:label>
+        <rdfs:comment>Bibliography that refers to records</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#SubjectObject">
+        <rdfs:label>Subject | Object</rdfs:label>
+        <rdfs:comment>Subject or object of study in data collection</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Record">
+        <rdfs:label>Record</rdfs:label>
+        <rdfs:comment>Base class for all types of records collected during research</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#InterviewTranscript">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:label>Interview Transcript</rdfs:label>
+        <rdfs:comment>Transcript of an interview as a type of record</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#FieldNotes">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:label>Field Notes</rdfs:label>
+        <rdfs:comment>Field notes as a type of record</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#EnrichedDocument">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/grounded_research_ontology#Record"/>
+        <rdfs:label>Enriched Document</rdfs:label>
+        <rdfs:comment>Enriched document as a type of record</rdfs:comment>
+    </owl:Class>
+    
+    <!-- Consensus Phase -->
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Reflexivity">
+        <rdfs:label>Reflexivity</rdfs:label>
+        <rdfs:comment>Reflexive process in the consensus phase</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#MethodOverSubjectObject">
+        <rdfs:label>Method Over Subject | Object</rdfs:label>
+        <rdfs:comment>Method applied over subject or object</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Interpretation">
+        <rdfs:label>Interpretation</rdfs:label>
+        <rdfs:comment>Interpretation of records in the consensus phase</rdfs:comment>
+    </owl:Class>
+    
+    <!-- Finding Phase -->
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Report">
+        <rdfs:label>Report</rdfs:label>
+        <rdfs:comment>Research report in the finding phase</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#GroundedTheory">
+        <rdfs:label>Grounded Theory</rdfs:label>
+        <rdfs:comment>Grounded theory reported in the findings</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory">
+        <rdfs:label>Analytic Category</rdfs:label>
+        <rdfs:comment>Analytic category elaborated from grounded theory</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory">
+        <rdfs:label>Descriptive Category</rdfs:label>
+        <rdfs:comment>Descriptive category elaborated from analytic category</rdfs:comment>
+    </owl:Class>
+    
+    <owl:Class rdf:about="http://www.semanticweb.org/grounded_research_ontology#Code">
+        <rdfs:label>Code</rdfs:label>
+        <rdfs:comment>Code elaborated from descriptive category or directly from interpretation</rdfs:comment>
+    </owl:Class>
+    
+</rdf:RDF>
+
