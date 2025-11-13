@@ -1,0 +1,172 @@
+# Composite Class Definitions
+# These definitions combine multiple phases and relationships
+
+# ============================================================================
+# Cross-Phase Composite Definitions
+# ============================================================================
+
+# Definition 1: Complete Research Project Workflow
+# A research project with complete workflow from formulation to findings
+ResearchProject and 
+  (hasObjective some (poses some ResearchQuestion)) and 
+  (hasResearcher some (appliesMethod some Method)) and 
+  (hasResearcher some (selects some FieldOfStudy))
+
+# Definition 2: Research Project with Data Collection
+# A research project connected to data collection through researchers
+ResearchProject and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some Record))))
+
+# Definition 3: Research Project with Interpreted Data
+# A research project with researchers whose fields have interpreted records
+ResearchProject and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some Interpretation)))))
+
+# Definition 4: Research Project with Findings
+# A research project connected to reports through reflexivity
+ResearchProject and 
+  (hasObjective some (poses some (isReformulated some (giveResponseTo some Report))))
+
+# Definition 5: Complete Research Cycle
+# A research project with complete cycle from question to reformulation
+ResearchProject and 
+  (hasObjective some (poses some (isReformulated some (toReformulation some ResearchQuestion))))
+
+# Definition 6: Data to Code Path
+# Records that are interpreted and generate codes
+Record and (isInterpreted some (hasCodes some Code))
+
+# Definition 7: Field to Code Path
+# Field of study leading to codes through complete data path
+FieldOfStudy and 
+  (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code))))
+
+# Definition 8: Method to Interpretation Path
+# Methods applied to subject objects with interpreted records
+Method and 
+  (appliesMethod some (isApplied some MethodOverSubjectObject)) and 
+  (hasSubjectObjects some (isInterpreted some Interpretation))
+
+# Definition 9: Researcher to Findings Path
+# Researchers whose work leads to reports
+Researcher and 
+  (appliesMethod some Method) and 
+  (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (giveResponseTo some Report)))))
+
+# Definition 10: Question to Theory Path
+# Research questions that lead to grounded theories
+ResearchQuestion and 
+  (isReformulated some (giveResponseTo some (isReported some GroundedTheory)))
+
+# Definition 11: Complete Methodology Path
+# Complete path from researcher selection to codes
+Researcher and 
+  (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))))
+
+# Definition 12: Bibliography to Theory Path
+# Bibliographies with records that contribute to theories
+Bibliography and 
+  (refersTo some (isInterpreted some (hasCodes some Code))) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# Definition 13: Reflexivity Bridge
+# Reflexivity connecting questions to reports
+Reflexivity and 
+  (isReformulated some ResearchQuestion) and 
+  ((giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Definition 14: Interpretation Bridge
+# Interpretations connecting records to codes
+Interpretation and 
+  (isInterpreted some Record) and 
+  (hasCodes some Code)
+
+# Definition 15: Theory Development Path
+# Complete path from interpretation to theory
+Interpretation and 
+  (hasCodes some Code) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# ============================================================================
+# Multi-Entity Composite Definitions
+# ============================================================================
+
+# Definition 16: Collaborative Research Project
+# A research project with multiple researchers
+ResearchProject and (hasResearcher min 2 Researcher)
+
+# Definition 17: Multi-Method Research
+# Research using multiple methods
+ResearchProject and (hasResearcher some (appliesMethod min 2 Method))
+
+# Definition 18: Multi-Field Research
+# Research spanning multiple fields of study
+Researcher and (selects min 2 FieldOfStudy)
+
+# Definition 19: Rich Data Collection
+# Subject objects with multiple record types
+SubjectObject and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some FieldNotes) and 
+  (hasSubjectObjects some EnrichedDocument)
+
+# Definition 20: Comprehensive Bibliography
+# Bibliography referencing multiple record types
+Bibliography and 
+  (refersTo some InterviewTranscript) and 
+  (refersTo some FieldNotes) and 
+  (refersTo some EnrichedDocument)
+
+# Definition 21: Multi-Code Interpretation
+# Interpretations generating multiple codes
+Interpretation and (hasCodes min 2 Code)
+
+# Definition 22: Complex Theory Structure
+# Grounded theory with multiple analytic categories
+GroundedTheory and (hasElaboratedTheory min 2 AnalyticCategory)
+
+# Definition 23: Networked Codes
+# Codes with multiple relationships
+Code and (hasRelatedCode min 2 Code)
+
+# Definition 24: Hierarchical Categories
+# Analytic categories with multiple related categories
+AnalyticCategory and (hasRelativeAnalyticCategory min 2 AnalyticCategory)
+
+# Definition 25: Multi-Report Reflexivity
+# Reflexivity connected to multiple reports
+Reflexivity and 
+  ((giveResponseTo some Report) and ((hasRelatedWork some Report) or (hasMethodology some Report)))
+
+# ============================================================================
+# Phase Integration Definitions
+# ============================================================================
+
+# Definition 26: Formulation-Collection Integration
+# Research projects with researchers connected to data collection
+ResearchProject and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some SubjectObject)))
+
+# Definition 27: Collection-Consensus Integration
+# Data collection connected to consensus through interpretation
+SubjectObject and 
+  (hasSubjectObjects some (isInterpreted some Interpretation))
+
+# Definition 28: Consensus-Findings Integration
+# Consensus connected to findings through codes
+Interpretation and 
+  (hasCodes some Code) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# Definition 29: Formulation-Findings Integration
+# Research questions connected to findings through reflexivity
+ResearchQuestion and 
+  (isReformulated some (giveResponseTo some (isReported some GroundedTheory)))
+
+# Definition 30: Complete Ontology Coverage
+# Entity participating in all four phases
+(hasObjective some ResearchObjective) and 
+  (hasSubjectObjects some Record) and 
+  (isInterpreted some Interpretation) and 
+  (isReported some GroundedTheory)
+

@@ -33,6 +33,7 @@ The `grounded_research_ontology.owl` file contains a comprehensive ontology repr
 - `.gitmessage` - Commit message template for conventional commits
 - `sparql/` - Directory containing SPARQL queries organized by research phase and use case
 - `dl-queries/` - Directory containing DL (Description Logic) queries for Protege
+- `definition-queries/` - Directory containing OWL class definition expressions
 
 ## SPARQL Queries
 
@@ -181,6 +182,19 @@ For more queries, see the complete collections:
 - [`07_property_queries.txt`](dl-queries/07_property_queries.txt) - 40 property-based queries
 
 See the [DL Queries README](dl-queries/README.md) for information on using DL queries in Protege.
+
+## Definition Language Queries
+
+This repository includes OWL class definition expressions that can be used to define new classes or create complex class expressions. These definitions follow OWL 2 DL syntax and can be used in Protege's Class Editor or DL Query tab.
+
+**Definition Queries** (in [`definition-queries/`](definition-queries/) directory):
+- [`01_class_definitions.txt`](definition-queries/01_class_definitions.txt) - 41 basic class definitions for each phase
+- [`02_composite_definitions.txt`](definition-queries/02_composite_definitions.txt) - 30 composite definitions combining multiple phases
+- [`03_constraint_definitions.txt`](definition-queries/03_constraint_definitions.txt) - 40 definitions with cardinality and constraints
+- [`04_pattern_definitions.txt`](definition-queries/04_pattern_definitions.txt) - 30 pattern-based definitions for common research patterns
+- [`05_derived_definitions.txt`](definition-queries/05_derived_definitions.txt) - 35 derived class definitions
+
+See the [Definition Queries README](definition-queries/README.md) for information on using these class definitions.
 
 ### DL Query Examples
 

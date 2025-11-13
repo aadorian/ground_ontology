@@ -1,0 +1,183 @@
+# Class Definitions for Grounded Research Ontology
+# These are OWL class expressions that can be used to define new classes
+
+# ============================================================================
+# Phase 1: Project Formulation Definitions
+# ============================================================================
+
+# Definition 1: Research Project with Objective
+# A research project that has at least one objective
+ResearchProject and (hasObjective some ResearchObjective)
+
+# Definition 2: Research Project with Theoretical Framework
+# A research project that has a theoretical framework
+ResearchProject and (hasTheoreticalFramework some TheoreticalFramework)
+
+# Definition 3: Research Project with Researcher
+# A research project that has at least one researcher
+ResearchProject and (hasResearcher some Researcher)
+
+# Definition 4: Complete Research Project
+# A research project with objective, framework, and researcher
+ResearchProject and (hasObjective some ResearchObjective) and (hasTheoreticalFramework some TheoreticalFramework) and (hasResearcher some Researcher)
+
+# Definition 5: Researcher with Field of Study
+# A researcher who has selected a field of study
+Researcher and (selects some FieldOfStudy)
+
+# Definition 6: Researcher with Method
+# A researcher who applies at least one method
+Researcher and (appliesMethod some Method)
+
+# Definition 7: Researcher with Interview Method
+# A researcher who applies the Interview method
+Researcher and (appliesMethod some Interview)
+
+# Definition 8: Active Researcher
+# A researcher with both field of study and method
+Researcher and (selects some FieldOfStudy) and (appliesMethod some Method)
+
+# Definition 9: Research Objective with Question
+# A research objective that poses at least one question
+ResearchObjective and (poses some ResearchQuestion)
+
+# Definition 10: Field of Study with Subject Objects
+# A field of study that has subject object applications
+FieldOfStudy and (hasSubjectObjectApplication some SubjectObject)
+
+# Definition 11: Research Question in Reformulation
+# A research question that has been reformulated
+ResearchQuestion and (isReformulated some Reflexivity)
+
+# ============================================================================
+# Phase 2: Data Collection Definitions
+# ============================================================================
+
+# Definition 12: Bibliography with References
+# A bibliography that refers to at least one record
+Bibliography and (refersTo some Record)
+
+# Definition 13: Bibliography with Interview Transcripts
+# A bibliography that refers to interview transcripts
+Bibliography and (refersTo some InterviewTranscript)
+
+# Definition 14: Subject Object with Records
+# A subject object that has associated records
+SubjectObject and (hasSubjectObjects some Record)
+
+# Definition 15: Subject Object with Interview Transcripts
+# A subject object that has interview transcripts
+SubjectObject and (hasSubjectObjects some InterviewTranscript)
+
+# Definition 16: Subject Object with Field Notes
+# A subject object that has field notes
+SubjectObject and (hasSubjectObjects some FieldNotes)
+
+# Definition 17: Subject Object Applied
+# A subject object that is applied in a method
+SubjectObject and (isApplied some MethodOverSubjectObject)
+
+# Definition 18: Record Interpreted
+# A record that has been interpreted
+Record and (isInterpreted some Interpretation)
+
+# Definition 19: Interview Transcript Interpreted
+# An interview transcript that has been interpreted
+InterviewTranscript and (isInterpreted some Interpretation)
+
+# Definition 20: Field Notes Interpreted
+# Field notes that have been interpreted
+FieldNotes and (isInterpreted some Interpretation)
+
+# Definition 21: Enriched Document Interpreted
+# An enriched document that has been interpreted
+EnrichedDocument and (isInterpreted some Interpretation)
+
+# Definition 22: Uninterpreted Record
+# A record that has not yet been interpreted
+Record and not (isInterpreted some Interpretation)
+
+# ============================================================================
+# Phase 3: Consensus Definitions
+# ============================================================================
+
+# Definition 23: Interpretation with Codes
+# An interpretation that has generated codes
+Interpretation and (hasCodes some Code)
+
+# Definition 24: Interpretation without Codes
+# An interpretation that has not yet generated codes
+Interpretation and not (hasCodes some Code)
+
+# Definition 25: Reflexivity with Reformulation
+# A reflexivity process that leads to question reformulation
+Reflexivity and (toReformulation some ResearchQuestion)
+
+# Definition 26: Reflexivity with Report Response
+# A reflexivity process that gives response to a report
+Reflexivity and (giveResponseTo some Report)
+
+# Definition 27: Reflexivity with Related Work
+# A reflexivity process with related work
+Reflexivity and (hasRelatedWork some Report)
+
+# Definition 28: Reflexivity with Methodology
+# A reflexivity process with methodology
+Reflexivity and (hasMethodology some Report)
+
+# Definition 29: Complete Reflexivity
+# A reflexivity process connected to reports
+Reflexivity and ((giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Definition 30: Method Over Subject Object
+# A method applied over a subject object
+MethodOverSubjectObject
+
+# ============================================================================
+# Phase 4: Findings Definitions
+# ============================================================================
+
+# Definition 31: Report with Grounded Theory
+# A report that reports a grounded theory
+Report and (isReported some GroundedTheory)
+
+# Definition 32: Grounded Theory with Analytic Categories
+# A grounded theory that has elaborated analytic categories
+GroundedTheory and (hasElaboratedTheory some AnalyticCategory)
+
+# Definition 33: Analytic Category with Related Categories
+# An analytic category with relative categories
+AnalyticCategory and (hasRelativeAnalyticCategory some AnalyticCategory)
+
+# Definition 34: Analytic Category with Descriptive Categories
+# An analytic category that elaborates to descriptive categories
+AnalyticCategory and (hasElaboratedAnalyticCategory some DescriptiveCategory)
+
+# Definition 35: Descriptive Category with Related Categories
+# A descriptive category with related categories
+DescriptiveCategory and (hasRelatedDescriptiveCategory some DescriptiveCategory)
+
+# Definition 36: Descriptive Category with Codes
+# A descriptive category that elaborates to codes
+DescriptiveCategory and (hasElaboratedDescriptiveCategory some Code)
+
+# Definition 37: Code with Related Codes
+# A code that has related codes
+Code and (hasRelatedCode some Code)
+
+# Definition 38: Isolated Code
+# A code without relationships
+Code and not (hasRelatedCode some Code)
+
+# Definition 39: Complete Theory Hierarchy
+# A grounded theory with complete hierarchy to codes
+GroundedTheory and (hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code)))
+
+# Definition 40: Code from Interpretation
+# A code that comes from an interpretation
+Code and (hasCodes some Interpretation)
+
+# Definition 41: Code from Descriptive Category
+# A code that comes from a descriptive category
+Code and (hasElaboratedDescriptiveCategory some DescriptiveCategory)
+
