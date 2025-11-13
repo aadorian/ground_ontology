@@ -1,0 +1,123 @@
+# DL Queries Involving Object Properties
+# These queries explore relationships and property restrictions
+
+# Query 1: Find entities with hasObjective property
+hasObjective some owl:Thing
+
+# Query 2: Find entities with hasResearcher property
+hasResearcher some owl:Thing
+
+# Query 3: Find entities with hasTheoreticalFramework property
+hasTheoreticalFramework some owl:Thing
+
+# Query 4: Find entities with selects property
+selects some owl:Thing
+
+# Query 5: Find entities with appliesMethod property
+appliesMethod some owl:Thing
+
+# Query 6: Find entities with poses property
+poses some owl:Thing
+
+# Query 7: Find entities with hasSubjectObjectApplication property
+hasSubjectObjectApplication some owl:Thing
+
+# Query 8: Find entities with refersTo property
+refersTo some owl:Thing
+
+# Query 9: Find entities with hasSubjectObjects property
+hasSubjectObjects some owl:Thing
+
+# Query 10: Find entities with isInterpreted property
+isInterpreted some owl:Thing
+
+# Query 11: Find entities with isApplied property
+isApplied some owl:Thing
+
+# Query 12: Find entities with isReformulated property
+isReformulated some owl:Thing
+
+# Query 13: Find entities with toReformulation property
+toReformulation some owl:Thing
+
+# Query 14: Find entities with giveResponseTo property
+giveResponseTo some owl:Thing
+
+# Query 15: Find entities with hasRelatedWork property
+hasRelatedWork some owl:Thing
+
+# Query 16: Find entities with hasMethodology property
+hasMethodology some owl:Thing
+
+# Query 17: Find entities with hasCodes property
+hasCodes some owl:Thing
+
+# Query 18: Find entities with isReported property
+isReported some owl:Thing
+
+# Query 19: Find entities with hasElaboratedTheory property
+hasElaboratedTheory some owl:Thing
+
+# Query 20: Find entities with hasRelativeAnalyticCategory property
+hasRelativeAnalyticCategory some owl:Thing
+
+# Query 21: Find entities with hasElaboratedAnalyticCategory property
+hasElaboratedAnalyticCategory some owl:Thing
+
+# Query 22: Find entities with hasRelatedDescriptiveCategory property
+hasRelatedDescriptiveCategory some owl:Thing
+
+# Query 23: Find entities with hasElaboratedDescriptiveCategory property
+hasElaboratedDescriptiveCategory some owl:Thing
+
+# Query 24: Find entities with hasRelatedCode property
+hasRelatedCode some owl:Thing
+
+# Query 25: Find research projects with exactly one objective
+hasObjective exactly 1 ResearchObjective
+
+# Query 26: Find research projects with at least one researcher
+hasResearcher min 1 Researcher
+
+# Query 27: Find researchers with at least one method
+appliesMethod min 1 Method
+
+# Query 28: Find interpretations with at least one code
+hasCodes min 1 Code
+
+# Query 29: Find research projects with at most one theoretical framework
+hasTheoreticalFramework max 1 TheoreticalFramework
+
+# Query 30: Find research questions with exactly one reformulation
+isReformulated exactly 1 Reflexivity
+
+# Query 31: Find records with exactly one interpretation
+isInterpreted exactly 1 Interpretation
+
+# Query 32: Find grounded theories with at least one analytic category
+hasElaboratedTheory min 1 AnalyticCategory
+
+# Query 33: Find analytic categories with multiple related categories
+hasRelativeAnalyticCategory min 2 AnalyticCategory
+
+# Query 34: Find codes with related codes
+hasRelatedCode min 1 Code
+
+# Query 35: Find research projects with multiple researchers
+hasResearcher min 2 Researcher
+
+# Query 36: Find researchers with multiple methods
+appliesMethod min 2 Method
+
+# Query 37: Find interpretations with multiple codes
+hasCodes min 2 Code
+
+# Query 38: Find reflexivity with multiple report connections
+(giveResponseTo min 1 Report) or (hasRelatedWork min 1 Report) or (hasMethodology min 1 Report)
+
+# Query 39: Find subject objects with multiple records
+hasSubjectObjects min 2 Record
+
+# Query 40: Find bibliographies with multiple references
+refersTo min 2 Record
+

@@ -1,0 +1,192 @@
+# Class Definitions with Constraints
+# These definitions include cardinality and other OWL constraints
+
+# ============================================================================
+# Cardinality Constraints
+# ============================================================================
+
+# Definition 1: Single Objective Project
+# A research project with exactly one objective
+ResearchProject and (hasObjective exactly 1 ResearchObjective)
+
+# Definition 2: Project with Multiple Researchers
+# A research project with at least two researchers
+ResearchProject and (hasResearcher min 2 Researcher)
+
+# Definition 3: Project with Single Framework
+# A research project with at most one theoretical framework
+ResearchProject and (hasTheoreticalFramework max 1 TheoreticalFramework)
+
+# Definition 4: Researcher with Multiple Methods
+# A researcher applying at least two methods
+Researcher and (appliesMethod min 2 Method)
+
+# Definition 5: Researcher with Single Field
+# A researcher selecting exactly one field of study
+Researcher and (selects exactly 1 FieldOfStudy)
+
+# Definition 6: Objective with Single Question
+# A research objective posing exactly one question
+ResearchObjective and (poses exactly 1 ResearchQuestion)
+
+# Definition 7: Field with Multiple Subject Objects
+# A field of study with at least two subject objects
+FieldOfStudy and (hasSubjectObjectApplication min 2 SubjectObject)
+
+# Definition 8: Bibliography with Multiple References
+# A bibliography referring to at least two records
+Bibliography and (refersTo min 2 Record)
+
+# Definition 9: Subject Object with Multiple Records
+# A subject object with at least two records
+SubjectObject and (hasSubjectObjects min 2 Record)
+
+# Definition 10: Record with Single Interpretation
+# A record interpreted exactly once
+Record and (isInterpreted exactly 1 Interpretation)
+
+# Definition 11: Interpretation with Multiple Codes
+# An interpretation generating at least two codes
+Interpretation and (hasCodes min 2 Code)
+
+# Definition 12: Reflexivity with Single Reformulation
+# A reflexivity leading to exactly one reformulated question
+Reflexivity and (toReformulation exactly 1 ResearchQuestion)
+
+# Definition 13: Question with Single Reformulation
+# A research question reformulated exactly once
+ResearchQuestion and (isReformulated exactly 1 Reflexivity)
+
+# Definition 14: Report with Single Grounded Theory
+# A report reporting exactly one grounded theory
+Report and (isReported exactly 1 GroundedTheory)
+
+# Definition 15: Grounded Theory with Multiple Categories
+# A grounded theory with at least two analytic categories
+GroundedTheory and (hasElaboratedTheory min 2 AnalyticCategory)
+
+# Definition 16: Analytic Category with Multiple Related
+# An analytic category with at least two related categories
+AnalyticCategory and (hasRelativeAnalyticCategory min 2 AnalyticCategory)
+
+# Definition 17: Analytic Category with Multiple Descriptive
+# An analytic category elaborating to at least two descriptive categories
+AnalyticCategory and (hasElaboratedAnalyticCategory min 2 DescriptiveCategory)
+
+# Definition 18: Descriptive Category with Multiple Related
+# A descriptive category with at least two related categories
+DescriptiveCategory and (hasRelatedDescriptiveCategory min 2 DescriptiveCategory)
+
+# Definition 19: Descriptive Category with Multiple Codes
+# A descriptive category elaborating to at least two codes
+DescriptiveCategory and (hasElaboratedDescriptiveCategory min 2 Code)
+
+# Definition 20: Code with Multiple Relations
+# A code with at least two related codes
+Code and (hasRelatedCode min 2 Code)
+
+# ============================================================================
+# Universal Restrictions (Only)
+# ============================================================================
+
+# Definition 21: Project with Only Objectives
+# A research project that has only objectives (no other direct properties)
+ResearchProject and (hasObjective only ResearchObjective)
+
+# Definition 22: Researcher with Only Methods
+# A researcher that applies only methods
+Researcher and (appliesMethod only Method)
+
+# Definition 23: Record with Only Interpretations
+# A record that is interpreted only (no other connections)
+Record and (isInterpreted only Interpretation)
+
+# Definition 24: Interpretation with Only Codes
+# An interpretation that has only codes
+Interpretation and (hasCodes only Code)
+
+# ============================================================================
+# Combined Constraints
+# ============================================================================
+
+# Definition 25: Complete Project with Constraints
+# A research project with exactly one objective, at least one researcher, and one framework
+ResearchProject and 
+  (hasObjective exactly 1 ResearchObjective) and 
+  (hasResearcher min 1 Researcher) and 
+  (hasTheoreticalFramework max 1 TheoreticalFramework)
+
+# Definition 26: Active Researcher with Constraints
+# A researcher with at least one field and at least one method
+Researcher and 
+  (selects min 1 FieldOfStudy) and 
+  (appliesMethod min 1 Method)
+
+# Definition 27: Rich Data Collection
+# Subject object with at least two records of different types
+SubjectObject and 
+  (hasSubjectObjects min 2 Record) and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some FieldNotes)
+
+# Definition 28: Comprehensive Interpretation
+# Interpretation with at least two codes
+Interpretation and (hasCodes min 2 Code)
+
+# Definition 29: Complex Theory Structure
+# Grounded theory with multiple categories and complete hierarchy
+GroundedTheory and 
+  (hasElaboratedTheory min 2 AnalyticCategory) and 
+  (hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code)))
+
+# Definition 30: Networked Code Structure
+# Code with multiple relationships
+Code and (hasRelatedCode min 2 Code)
+
+# ============================================================================
+# Negation Constraints
+# ============================================================================
+
+# Definition 31: Incomplete Project
+# A research project without an objective
+ResearchProject and not (hasObjective some ResearchObjective)
+
+# Definition 32: Inactive Researcher
+# A researcher without methods or fields
+Researcher and not (appliesMethod some Method) and not (selects some FieldOfStudy)
+
+# Definition 33: Uninterpreted Record
+# A record that has not been interpreted
+Record and not (isInterpreted some Interpretation)
+
+# Definition 34: Interpretation without Codes
+# An interpretation that has not generated codes
+Interpretation and not (hasCodes some Code)
+
+# Definition 35: Isolated Code
+# A code without relationships
+Code and not (hasRelatedCode some Code) and not (hasElaboratedDescriptiveCategory some DescriptiveCategory)
+
+# Definition 36: Unreported Grounded Theory
+# A grounded theory not reported in any report
+GroundedTheory and not (isReported some Report)
+
+# Definition 37: Reflexivity without Connections
+# A reflexivity process without report connections
+Reflexivity and 
+  not (giveResponseTo some Report) and 
+  not (hasRelatedWork some Report) and 
+  not (hasMethodology some Report)
+
+# Definition 38: Research Question without Reformulation
+# A research question that has not been reformulated
+ResearchQuestion and not (isReformulated some Reflexivity)
+
+# Definition 39: Field without Subject Objects
+# A field of study without subject object applications
+FieldOfStudy and not (hasSubjectObjectApplication some SubjectObject)
+
+# Definition 40: Bibliography without References
+# A bibliography without record references
+Bibliography and not (refersTo some Record)
+

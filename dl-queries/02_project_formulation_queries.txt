@@ -1,0 +1,69 @@
+# DL Queries for Phase 1: Project Formulation
+# These queries explore research projects, objectives, researchers, and methods
+
+# Query 1: Find research projects that have an objective
+hasObjective some ResearchObjective
+
+# Query 2: Find research projects that have a theoretical framework
+hasTheoreticalFramework some TheoreticalFramework
+
+# Query 3: Find research projects that have a researcher
+hasResearcher some Researcher
+
+# Query 4: Find research projects with complete information (objective, framework, researcher)
+hasObjective some ResearchObjective and hasTheoreticalFramework some TheoreticalFramework and hasResearcher some Researcher
+
+# Query 5: Find researchers that select a field of study
+selects some FieldOfStudy
+
+# Query 6: Find researchers that apply a method
+appliesMethod some Method
+
+# Query 7: Find researchers that apply the Interview method specifically
+appliesMethod some Interview
+
+# Query 8: Find researchers with both field of study and method
+selects some FieldOfStudy and appliesMethod some Method
+
+# Query 9: Find research objectives that pose a question
+poses some ResearchQuestion
+
+# Query 10: Find research questions (instances)
+ResearchQuestion
+
+# Query 11: Find fields of study that have subject object applications
+hasSubjectObjectApplication some SubjectObject
+
+# Query 12: Find methods (all types)
+Method
+
+# Query 13: Find Interview methods specifically
+Interview
+
+# Query 14: Find research projects connected to researchers who apply methods
+hasResearcher some (appliesMethod some Method)
+
+# Query 15: Find research projects with objectives that pose questions
+hasObjective some (poses some ResearchQuestion)
+
+# Query 16: Find researchers involved in projects with theoretical frameworks
+(hasResearcher some Researcher) and (hasTheoreticalFramework some TheoreticalFramework)
+
+# Query 17: Find research questions that are reformulated (connected to reflexivity)
+isReformulated some Reflexivity
+
+# Query 18: Find complete project formulation chain
+hasObjective some (poses some ResearchQuestion) and hasResearcher some (selects some FieldOfStudy) and hasResearcher some (appliesMethod some Method)
+
+# Query 19: Find research projects without objectives
+ResearchProject and not (hasObjective some ResearchObjective)
+
+# Query 20: Find research objectives without questions
+ResearchObjective and not (poses some ResearchQuestion)
+
+# Query 21: Find researchers without methods
+Researcher and not (appliesMethod some Method)
+
+# Query 22: Find researchers without fields of study
+Researcher and not (selects some FieldOfStudy)
+

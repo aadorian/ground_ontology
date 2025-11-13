@@ -1,0 +1,218 @@
+# Pattern-Based Class Definitions
+# These definitions capture common research patterns and workflows
+
+# ============================================================================
+# Research Workflow Patterns
+# ============================================================================
+
+# Pattern 1: Standard Research Workflow
+# Complete workflow from project formulation to findings
+ResearchProject and 
+  (hasObjective some (poses some ResearchQuestion)) and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))))) and 
+  (isReported some GroundedTheory)
+
+# Pattern 2: Iterative Research Pattern
+# Research with question reformulation cycles
+ResearchProject and 
+  (hasObjective some (poses some (isReformulated some (toReformulation some ResearchQuestion)))) and 
+  (hasResearcher some Researcher)
+
+# Pattern 3: Theory Development Pattern
+# Pattern from data collection through theory development
+Record and 
+  (isInterpreted some (hasCodes some Code)) and 
+  (hasElaboratedDescriptiveCategory some Code) and 
+  (hasElaboratedAnalyticCategory some DescriptiveCategory) and 
+  (hasElaboratedTheory some AnalyticCategory)
+
+# Pattern 4: Multi-Method Research Pattern
+# Research using multiple methods
+ResearchProject and 
+  (hasResearcher some (appliesMethod min 2 Method)) and 
+  (hasResearcher some (selects some FieldOfStudy))
+
+# Pattern 5: Collaborative Research Pattern
+# Research with multiple researchers
+ResearchProject and 
+  (hasResearcher min 2 Researcher) and 
+  (hasObjective some ResearchObjective)
+
+# Pattern 6: Literature-Based Research Pattern
+# Research heavily based on bibliographies
+Bibliography and 
+  (refersTo min 2 Record) and 
+  (refersTo some (isInterpreted some Interpretation))
+
+# Pattern 7: Fieldwork Research Pattern
+# Research with field notes and interviews
+SubjectObject and 
+  (hasSubjectObjects some FieldNotes) and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some (isInterpreted some Interpretation))
+
+# Pattern 8: Reflexive Research Pattern
+# Research with strong reflexivity component
+ResearchQuestion and 
+  (isReformulated some Reflexivity) and 
+  (toReformulation some ResearchQuestion) and 
+  (giveResponseTo some Report)
+
+# Pattern 9: Grounded Theory Development Pattern
+# Complete grounded theory development from codes
+Interpretation and 
+  (hasCodes some Code) and 
+  (hasElaboratedDescriptiveCategory some Code) and 
+  (hasElaboratedAnalyticCategory some DescriptiveCategory) and 
+  (hasElaboratedTheory some AnalyticCategory) and 
+  (isReported some GroundedTheory)
+
+# Pattern 10: Mixed Methods Pattern
+# Research combining different record types
+SubjectObject and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some FieldNotes) and 
+  (hasSubjectObjects some EnrichedDocument)
+
+# ============================================================================
+# Data Flow Patterns
+# ============================================================================
+
+# Pattern 11: Direct Data to Code Flow
+# Records directly interpreted to codes
+Record and (isInterpreted some (hasCodes some Code))
+
+# Pattern 12: Hierarchical Code Development
+# Codes developed through category hierarchy
+Code and 
+  (hasElaboratedDescriptiveCategory some DescriptiveCategory) and 
+  (hasElaboratedAnalyticCategory some AnalyticCategory) and 
+  (hasElaboratedTheory some GroundedTheory)
+
+# Pattern 13: Dual Code Path Pattern
+# Codes from both interpretation and category paths
+Code and 
+  (hasCodes some Interpretation) and 
+  (hasElaboratedDescriptiveCategory some DescriptiveCategory)
+
+# Pattern 14: Network Code Pattern
+# Codes in relationship networks
+Code and (hasRelatedCode some Code) and (hasRelatedCode min 2 Code)
+
+# Pattern 15: Category Hierarchy Pattern
+# Complete category hierarchy structure
+GroundedTheory and 
+  (hasElaboratedTheory some (hasRelativeAnalyticCategory some AnalyticCategory)) and 
+  (hasElaboratedAnalyticCategory some (hasRelatedDescriptiveCategory some DescriptiveCategory)) and 
+  (hasElaboratedDescriptiveCategory some (hasRelatedCode some Code))
+
+# ============================================================================
+# Research Question Patterns
+# ============================================================================
+
+# Pattern 16: Question Reformulation Cycle
+# Questions that go through reformulation cycles
+ResearchQuestion and 
+  (isReformulated some Reflexivity) and 
+  (toReformulation some ResearchQuestion)
+
+# Pattern 17: Question to Findings Pattern
+# Questions leading to findings through reflexivity
+ResearchQuestion and 
+  (isReformulated some (giveResponseTo some (isReported some GroundedTheory)))
+
+# Pattern 18: Multiple Reformulation Pattern
+# Questions with multiple reformulations
+ResearchQuestion and (isReformulated min 2 Reflexivity)
+
+# ============================================================================
+# Method Application Patterns
+# ============================================================================
+
+# Pattern 19: Method to Data Pattern
+# Methods applied to subject objects with records
+Method and 
+  (appliesMethod some Researcher) and 
+  (isApplied some MethodOverSubjectObject) and 
+  (hasSubjectObjects some Record)
+
+# Pattern 20: Interview Method Pattern
+# Interview method with interview transcripts
+Interview and 
+  (appliesMethod some Researcher) and 
+  (hasSubjectObjects some InterviewTranscript)
+
+# Pattern 21: Field Method Pattern
+# Field methods with field notes
+Method and 
+  (appliesMethod some Researcher) and 
+  (hasSubjectObjects some FieldNotes)
+
+# ============================================================================
+# Reflexivity Patterns
+# ============================================================================
+
+# Pattern 22: Reflexivity Bridge Pattern
+# Reflexivity connecting questions to reports
+Reflexivity and 
+  (isReformulated some ResearchQuestion) and 
+  ((giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Pattern 23: Multi-Report Reflexivity Pattern
+# Reflexivity connected to multiple reports
+Reflexivity and 
+  (giveResponseTo some Report) and 
+  ((hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Pattern 24: Reflexivity Cycle Pattern
+# Reflexivity in reformulation cycles
+Reflexivity and 
+  (isReformulated some ResearchQuestion) and 
+  (toReformulation some ResearchQuestion)
+
+# ============================================================================
+# Theory Development Patterns
+# ============================================================================
+
+# Pattern 25: Linear Theory Development
+# Linear development from theory to codes
+GroundedTheory and 
+  (hasElaboratedTheory some AnalyticCategory) and 
+  (hasElaboratedAnalyticCategory some DescriptiveCategory) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# Pattern 26: Networked Theory Development
+# Theory with networked categories
+GroundedTheory and 
+  (hasElaboratedTheory some (hasRelativeAnalyticCategory some AnalyticCategory)) and 
+  (hasElaboratedAnalyticCategory some (hasRelatedDescriptiveCategory some DescriptiveCategory))
+
+# Pattern 27: Multi-Level Theory Pattern
+# Theory with multiple levels of categories
+GroundedTheory and 
+  (hasElaboratedTheory min 2 AnalyticCategory) and 
+  (hasElaboratedAnalyticCategory min 2 DescriptiveCategory) and 
+  (hasElaboratedDescriptiveCategory min 2 Code)
+
+# Pattern 28: Complete Theory Pattern
+# Complete theory from report to codes
+Report and 
+  (isReported some (hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code))))
+
+# ============================================================================
+# Integration Patterns
+# ============================================================================
+
+# Pattern 29: Full Integration Pattern
+# Complete integration across all phases
+ResearchProject and 
+  (hasObjective some (poses some ResearchQuestion)) and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))))) and 
+  (isReformulated some (giveResponseTo some (isReported some GroundedTheory)))
+
+# Pattern 30: Data-Driven Pattern
+# Pattern emphasizing data collection and interpretation
+SubjectObject and 
+  (hasSubjectObjects min 2 Record) and 
+  (hasSubjectObjects some (isInterpreted some (hasCodes min 2 Code)))
+

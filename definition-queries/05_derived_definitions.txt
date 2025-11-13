@@ -1,0 +1,221 @@
+# Derived Class Definitions
+# These definitions create new classes based on relationships and patterns
+
+# ============================================================================
+# Derived Classes for Research Projects
+# ============================================================================
+
+# Derived Class 1: Well-Defined Research Project
+# A research project with all essential components
+ResearchProject and 
+  (hasObjective some ResearchObjective) and 
+  (hasTheoreticalFramework some TheoreticalFramework) and 
+  (hasResearcher some Researcher) and 
+  (hasObjective some (poses some ResearchQuestion))
+
+# Derived Class 2: Active Research Project
+# A research project with active data collection
+ResearchProject and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some Record))))
+
+# Derived Class 3: Completed Research Project
+# A research project with findings
+ResearchProject and 
+  (hasObjective some (poses some (isReformulated some (giveResponseTo some (isReported some GroundedTheory)))))
+
+# Derived Class 4: Collaborative Project
+# A research project with multiple researchers
+ResearchProject and (hasResearcher min 2 Researcher)
+
+# Derived Class 5: Multi-Method Project
+# A research project using multiple methods
+ResearchProject and (hasResearcher some (appliesMethod min 2 Method))
+
+# ============================================================================
+# Derived Classes for Researchers
+# ============================================================================
+
+# Derived Class 6: Experienced Researcher
+# A researcher with field of study and multiple methods
+Researcher and 
+  (selects some FieldOfStudy) and 
+  (appliesMethod min 2 Method)
+
+# Derived Class 7: Field Specialist
+# A researcher focused on a specific field
+Researcher and 
+  (selects exactly 1 FieldOfStudy) and 
+  (appliesMethod some Method)
+
+# Derived Class 8: Method Expert
+# A researcher expert in interview methods
+Researcher and (appliesMethod some Interview)
+
+# Derived Class 9: Multi-Field Researcher
+# A researcher working across multiple fields
+Researcher and (selects min 2 FieldOfStudy)
+
+# ============================================================================
+# Derived Classes for Data Collection
+# ============================================================================
+
+# Derived Class 10: Rich Data Source
+# A subject object with multiple record types
+SubjectObject and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some FieldNotes) and 
+  (hasSubjectObjects some EnrichedDocument)
+
+# Derived Class 11: Comprehensive Bibliography
+# A bibliography with multiple references
+Bibliography and (refersTo min 2 Record)
+
+# Derived Class 12: Interpreted Data Collection
+# Records that have been interpreted
+Record and (isInterpreted some Interpretation)
+
+# Derived Class 13: Multi-Record Subject
+# A subject object with multiple records
+SubjectObject and (hasSubjectObjects min 2 Record)
+
+# Derived Class 14: Applied Subject Object
+# A subject object with applied methods
+SubjectObject and (isApplied some MethodOverSubjectObject)
+
+# ============================================================================
+# Derived Classes for Consensus
+# ============================================================================
+
+# Derived Class 15: Productive Interpretation
+# An interpretation that has generated codes
+Interpretation and (hasCodes some Code)
+
+# Derived Class 16: Multi-Code Interpretation
+# An interpretation generating multiple codes
+Interpretation and (hasCodes min 2 Code)
+
+# Derived Class 17: Active Reflexivity
+# A reflexivity process with report connections
+Reflexivity and 
+  ((giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Derived Class 18: Reformulation Reflexivity
+# A reflexivity leading to question reformulation
+Reflexivity and (toReformulation some ResearchQuestion)
+
+# Derived Class 19: Complete Reflexivity
+# A reflexivity with multiple connections
+Reflexivity and 
+  (toReformulation some ResearchQuestion) and 
+  ((giveResponseTo some Report) or (hasRelatedWork some Report))
+
+# ============================================================================
+# Derived Classes for Findings
+# ============================================================================
+
+# Derived Class 20: Complete Report
+# A report with grounded theory and hierarchy
+Report and 
+  (isReported some (hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code))))
+
+# Derived Class 21: Developed Grounded Theory
+# A grounded theory with complete category structure
+GroundedTheory and 
+  (hasElaboratedTheory some AnalyticCategory) and 
+  (hasElaboratedAnalyticCategory some DescriptiveCategory) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# Derived Class 22: Networked Analytic Category
+# An analytic category in a network
+AnalyticCategory and (hasRelativeAnalyticCategory some AnalyticCategory)
+
+# Derived Class 23: Elaborated Descriptive Category
+# A descriptive category with codes
+DescriptiveCategory and (hasElaboratedDescriptiveCategory some Code)
+
+# Derived Class 24: Networked Code
+# A code in a relationship network
+Code and (hasRelatedCode some Code)
+
+# Derived Class 25: Dual-Source Code
+# A code from both interpretation and category
+Code and 
+  (hasCodes some Interpretation) and 
+  (hasElaboratedDescriptiveCategory some DescriptiveCategory)
+
+# ============================================================================
+# Derived Classes for Workflows
+# ============================================================================
+
+# Derived Class 26: Complete Research Workflow
+# Complete workflow from project to findings
+ResearchProject and 
+  (hasObjective some ResearchObjective) and 
+  (hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))))) and 
+  (isReported some GroundedTheory)
+
+# Derived Class 27: Iterative Research Workflow
+# Research with reformulation cycles
+ResearchProject and 
+  (hasObjective some (poses some (isReformulated some (toReformulation some ResearchQuestion)))) and 
+  (hasResearcher some Researcher)
+
+# Derived Class 28: Data-Driven Workflow
+# Workflow emphasizing data collection
+SubjectObject and 
+  (hasSubjectObjects min 2 Record) and 
+  (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))
+
+# Derived Class 29: Theory-Driven Workflow
+# Workflow emphasizing theory development
+GroundedTheory and 
+  (hasElaboratedTheory some AnalyticCategory) and 
+  (hasElaboratedAnalyticCategory some DescriptiveCategory) and 
+  (hasElaboratedDescriptiveCategory some Code)
+
+# Derived Class 30: Reflexive Workflow
+# Workflow with strong reflexivity
+ResearchQuestion and 
+  (isReformulated some Reflexivity) and 
+  (toReformulation some ResearchQuestion) and 
+  (giveResponseTo some Report)
+
+# ============================================================================
+# Derived Classes for Quality Indicators
+# ============================================================================
+
+# Derived Class 31: High-Quality Project
+# Project with complete information and active research
+ResearchProject and 
+  (hasObjective some ResearchObjective) and 
+  (hasTheoreticalFramework some TheoreticalFramework) and 
+  (hasResearcher min 1 Researcher) and 
+  (hasResearcher some (appliesMethod some Method)) and 
+  (hasResearcher some (selects some FieldOfStudy))
+
+# Derived Class 32: Comprehensive Data Collection
+# Rich data collection with multiple sources
+SubjectObject and 
+  (hasSubjectObjects min 2 Record) and 
+  (hasSubjectObjects some InterviewTranscript) and 
+  (hasSubjectObjects some FieldNotes)
+
+# Derived Class 33: Thorough Interpretation
+# Interpretation with multiple codes
+Interpretation and (hasCodes min 2 Code)
+
+# Derived Class 34: Well-Developed Theory
+# Theory with complete hierarchy
+GroundedTheory and 
+  (hasElaboratedTheory min 2 AnalyticCategory) and 
+  (hasElaboratedAnalyticCategory min 2 DescriptiveCategory) and 
+  (hasElaboratedDescriptiveCategory min 2 Code)
+
+# Derived Class 35: Complete Research Cycle
+# Research with all phases represented
+ResearchProject and 
+  (hasObjective some (poses some ResearchQuestion)) and 
+  (hasSubjectObjects some Record) and 
+  (isInterpreted some Interpretation) and 
+  (isReported some GroundedTheory)
+

@@ -1,0 +1,75 @@
+# DL Queries for Phase 2: Data Collection
+# These queries explore bibliographies, records, and subject objects
+
+# Query 1: Find all records (base class and subclasses)
+Record
+
+# Query 2: Find bibliographies that refer to records
+refersTo some Record
+
+# Query 3: Find bibliographies that refer to InterviewTranscripts
+refersTo some InterviewTranscript
+
+# Query 4: Find bibliographies that refer to FieldNotes
+refersTo some FieldNotes
+
+# Query 5: Find bibliographies that refer to EnrichedDocuments
+refersTo some EnrichedDocument
+
+# Query 6: Find subject objects that have records
+hasSubjectObjects some Record
+
+# Query 7: Find subject objects that have InterviewTranscripts
+hasSubjectObjects some InterviewTranscript
+
+# Query 8: Find subject objects that have FieldNotes
+hasSubjectObjects some FieldNotes
+
+# Query 9: Find subject objects that are applied (connected to consensus phase)
+isApplied some MethodOverSubjectObject
+
+# Query 10: Find records that are interpreted (connected to consensus phase)
+isInterpreted some Interpretation
+
+# Query 11: Find InterviewTranscripts that are interpreted
+InterviewTranscript and (isInterpreted some Interpretation)
+
+# Query 12: Find FieldNotes that are interpreted
+FieldNotes and (isInterpreted some Interpretation)
+
+# Query 13: Find EnrichedDocuments that are interpreted
+EnrichedDocument and (isInterpreted some Interpretation)
+
+# Query 14: Find records that are not yet interpreted
+Record and not (isInterpreted some Interpretation)
+
+# Query 15: Find subject objects with multiple record types
+hasSubjectObjects some (InterviewTranscript or FieldNotes or EnrichedDocument)
+
+# Query 16: Find bibliographies that refer to interpreted records
+refersTo some (isInterpreted some Interpretation)
+
+# Query 17: Find subject objects connected to fields of study
+(hasSubjectObjectApplication some SubjectObject) and SubjectObject
+
+# Query 18: Find complete data collection chain: FieldOfStudy -> SubjectObject -> Record
+hasSubjectObjectApplication some (hasSubjectObjects some Record)
+
+# Query 19: Find records that are both in bibliographies and have subject objects
+(refersTo some Record) and (hasSubjectObjects some Record)
+
+# Query 20: Find InterviewTranscripts (specific type)
+InterviewTranscript
+
+# Query 21: Find FieldNotes (specific type)
+FieldNotes
+
+# Query 22: Find EnrichedDocuments (specific type)
+EnrichedDocument
+
+# Query 23: Find subject objects not yet applied
+SubjectObject and not (isApplied some MethodOverSubjectObject)
+
+# Query 24: Find bibliographies without references
+Bibliography and not (refersTo some Record)
+

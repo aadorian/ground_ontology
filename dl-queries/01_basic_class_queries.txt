@@ -1,0 +1,72 @@
+# Basic DL Queries - Class Exploration
+# These queries help explore the basic structure of the ontology
+
+# Query 1: Find all instances of ResearchProject
+ResearchProject
+
+# Query 2: Find all instances of Researcher
+Researcher
+
+# Query 3: Find all instances of Method
+Method
+
+# Query 4: Find all instances of Record (including subclasses)
+Record
+
+# Query 5: Find all instances of Interview (subclass of Method)
+Interview
+
+# Query 6: Find all instances of InterviewTranscript (subclass of Record)
+InterviewTranscript
+
+# Query 7: Find all instances of FieldNotes (subclass of Record)
+FieldNotes
+
+# Query 8: Find all instances of EnrichedDocument (subclass of Record)
+EnrichedDocument
+
+# Query 9: Find all instances of Interpretation
+Interpretation
+
+# Query 10: Find all instances of Code
+Code
+
+# Query 11: Find all instances of GroundedTheory
+GroundedTheory
+
+# Query 12: Find all instances of Report
+Report
+
+# Query 13: Find all instances of Reflexivity
+Reflexivity
+
+# Query 14: Find all instances of ResearchQuestion
+ResearchQuestion
+
+# Query 15: Find all instances of ResearchObjective
+ResearchObjective
+
+# Query 16: Find all instances of TheoreticalFramework
+TheoreticalFramework
+
+# Query 17: Find all instances of FieldOfStudy
+FieldOfStudy
+
+# Query 18: Find all instances of SubjectObject
+SubjectObject
+
+# Query 19: Find all instances of Bibliography
+Bibliography
+
+# Query 20: Find all instances of AnalyticCategory
+AnalyticCategory
+
+# Query 21: Find all instances of DescriptiveCategory
+DescriptiveCategory
+
+# Query 22: Find all instances of MethodOverSubjectObject
+MethodOverSubjectObject
+
+# Query 23: Find all instances of CoreCategory (if it exists)
+CoreCategory
+

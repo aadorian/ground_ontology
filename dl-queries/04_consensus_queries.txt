@@ -1,0 +1,75 @@
+# DL Queries for Phase 3: Consensus
+# These queries explore reflexivity, interpretation, and method application
+
+# Query 1: Find all interpretations
+Interpretation
+
+# Query 2: Find interpretations that have codes
+hasCodes some Code
+
+# Query 3: Find interpretations without codes
+Interpretation and not (hasCodes some Code)
+
+# Query 4: Find records that are interpreted
+isInterpreted some Interpretation
+
+# Query 5: Find reflexivity instances
+Reflexivity
+
+# Query 6: Find research questions that are reformulated
+isReformulated some Reflexivity
+
+# Query 7: Find reflexivity that leads to reformulation
+toReformulation some ResearchQuestion
+
+# Query 8: Find reflexivity that gives response to reports
+giveResponseTo some Report
+
+# Query 9: Find reflexivity with related work
+hasRelatedWork some Report
+
+# Query 10: Find reflexivity with methodology
+hasMethodology some Report
+
+# Query 11: Find reflexivity connected to reports (any connection)
+(giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report)
+
+# Query 12: Find method over subject object instances
+MethodOverSubjectObject
+
+# Query 13: Find subject objects that are applied
+isApplied some MethodOverSubjectObject
+
+# Query 14: Find complete interpretation chain: Record -> Interpretation -> Code
+isInterpreted some (hasCodes some Code)
+
+# Query 15: Find research question reformulation cycle
+isReformulated some (toReformulation some ResearchQuestion)
+
+# Query 16: Find interpretations with multiple codes
+hasCodes some Code and hasCodes min 2 Code
+
+# Query 17: Find reflexivity with multiple report connections
+(giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report)
+
+# Query 18: Find records interpreted into codes
+isInterpreted some (hasCodes some Code)
+
+# Query 19: Find research questions in reformulation cycles
+ResearchQuestion and (isReformulated some Reflexivity) and (toReformulation some ResearchQuestion)
+
+# Query 20: Find interpretations from InterviewTranscripts
+isInterpreted some Interpretation and InterviewTranscript
+
+# Query 21: Find interpretations from FieldNotes
+isInterpreted some Interpretation and FieldNotes
+
+# Query 22: Find interpretations from EnrichedDocuments
+isInterpreted some Interpretation and EnrichedDocument
+
+# Query 23: Find reflexivity without report connections
+Reflexivity and not (giveResponseTo some Report) and not (hasRelatedWork some Report) and not (hasMethodology some Report)
+
+# Query 24: Find complete consensus workflow
+(isInterpreted some (hasCodes some Code)) and (isReformulated some (toReformulation some ResearchQuestion))
+
