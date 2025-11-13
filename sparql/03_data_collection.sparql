@@ -1,0 +1,147 @@
+# SPARQL Queries for Phase 2: Data Collection
+# These queries explore bibliographies, records, and subject objects
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: List all records
+# Description: Returns all record instances regardless of type
+SELECT ?record ?recordType
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+}
+ORDER BY ?recordType ?record
+
+# Query 2: Get all bibliographies and what they refer to
+# Description: Shows bibliographies and their referenced records
+SELECT ?bibliography ?record
+WHERE {
+    ?bibliography rdf:type :Bibliography .
+    ?bibliography :refersTo ?record .
+}
+ORDER BY ?bibliography ?record
+
+# Query 3: Find all InterviewTranscript instances
+# Description: Lists all interview transcript records
+SELECT ?transcript
+WHERE {
+    ?transcript rdf:type :InterviewTranscript .
+}
+ORDER BY ?transcript
+
+# Query 4: Find all FieldNotes instances
+# Description: Lists all field notes records
+SELECT ?fieldNotes
+WHERE {
+    ?fieldNotes rdf:type :FieldNotes .
+}
+ORDER BY ?fieldNotes
+
+# Query 5: Find all EnrichedDocument instances
+# Description: Lists all enriched document records
+SELECT ?document
+WHERE {
+    ?document rdf:type :EnrichedDocument .
+}
+ORDER BY ?document
+
+# Query 6: Get subject objects and their records
+# Description: Shows which records belong to which subject objects
+SELECT ?subjectObject ?record
+WHERE {
+    ?subjectObject rdf:type :SubjectObject .
+    ?subjectObject :hasSubjectObjects ?record .
+}
+ORDER BY ?subjectObject ?record
+
+# Query 7: Count records by type
+# Description: Shows how many records exist for each record type
+SELECT ?recordType (COUNT(?record) AS ?count)
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+}
+GROUP BY ?recordType
+ORDER BY DESC(?count)
+
+# Query 8: Find records that haven't been interpreted yet
+# Description: Identifies records that are not yet linked to interpretations
+SELECT ?record ?recordType
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    FILTER NOT EXISTS {
+        ?record :isInterpreted ?interpretation .
+    }
+}
+ORDER BY ?recordType ?record
+
+# Query 9: Get subject objects and their method applications
+# Description: Shows how subject objects connect to the consensus phase
+SELECT ?subjectObject ?methodOverSubjectObject
+WHERE {
+    ?subjectObject rdf:type :SubjectObject .
+    ?subjectObject :isApplied ?methodOverSubjectObject .
+}
+ORDER BY ?subjectObject
+
+# Query 10: Find bibliographies with multiple references
+# Description: Identifies bibliographies that reference multiple records
+SELECT ?bibliography (COUNT(?record) AS ?referenceCount)
+WHERE {
+    ?bibliography rdf:type :Bibliography .
+    ?bibliography :refersTo ?record .
+}
+GROUP BY ?bibliography
+HAVING (COUNT(?record) > 1)
+ORDER BY DESC(?referenceCount)
+
+# Query 11: Get complete record information
+# Description: Retrieves all relationships for records
+SELECT ?record ?recordType ?subjectObject ?bibliography ?interpretation
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    OPTIONAL { ?subjectObject :hasSubjectObjects ?record }
+    OPTIONAL { ?bibliography :refersTo ?record }
+    OPTIONAL { ?record :isInterpreted ?interpretation }
+}
+ORDER BY ?record
+
+# Query 12: Find records by subject object
+# Description: Groups records by their subject objects
+SELECT ?subjectObject (COUNT(?record) AS ?recordCount)
+WHERE {
+    ?subjectObject rdf:type :SubjectObject .
+    ?subjectObject :hasSubjectObjects ?record .
+}
+GROUP BY ?subjectObject
+ORDER BY DESC(?recordCount)
+
+# Query 13: Records connected to field of study
+# Description: Shows the path from field of study to records
+SELECT ?fieldOfStudy ?subjectObject ?record
+WHERE {
+    ?fieldOfStudy rdf:type :FieldOfStudy .
+    ?fieldOfStudy :hasSubjectObjectApplication ?subjectObject .
+    ?subjectObject :hasSubjectObjects ?record .
+}
+ORDER BY ?fieldOfStudy ?subjectObject ?record
+
+# Query 14: Find orphaned records (no subject object, no bibliography)
+# Description: Identifies records that aren't connected to other entities
+SELECT ?record ?recordType
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    FILTER NOT EXISTS {
+        ?subjectObject :hasSubjectObjects ?record .
+    }
+    FILTER NOT EXISTS {
+        ?bibliography :refersTo ?record .
+    }
+}
+ORDER BY ?recordType ?record
+

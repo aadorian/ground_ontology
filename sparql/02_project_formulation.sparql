@@ -1,0 +1,145 @@
+# SPARQL Queries for Phase 1: Project Formulation
+# These queries explore research projects, objectives, researchers, and methods
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: List all research projects
+# Description: Returns all research project instances
+SELECT ?project
+WHERE {
+    ?project rdf:type :ResearchProject .
+}
+ORDER BY ?project
+
+# Query 2: Get complete project information
+# Description: Retrieves all details about research projects
+SELECT ?project ?objective ?framework ?researcher ?question
+WHERE {
+    ?project rdf:type :ResearchProject .
+    OPTIONAL { ?project :hasObjective ?objective }
+    OPTIONAL { ?project :hasTheoreticalFramework ?framework }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+    OPTIONAL { ?objective :poses ?question }
+}
+ORDER BY ?project
+
+# Query 3: Find researchers and their fields of study
+# Description: Shows which researchers work in which fields
+SELECT ?researcher ?fieldOfStudy
+WHERE {
+    ?researcher rdf:type :Researcher .
+    ?researcher :selects ?fieldOfStudy .
+    BIND(?researcher AS ?researcher)
+}
+ORDER BY ?researcher ?fieldOfStudy
+
+# Query 4: Find researchers and their methods
+# Description: Shows which methods each researcher applies
+SELECT ?researcher ?method
+WHERE {
+    ?researcher rdf:type :Researcher .
+    ?researcher :appliesMethod ?method .
+}
+ORDER BY ?researcher ?method
+
+# Query 5: Get research questions for each project
+# Description: Follows the chain from project to objective to question
+SELECT ?project ?objective ?question
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasObjective ?objective .
+    ?objective :poses ?question .
+}
+ORDER BY ?project ?question
+
+# Query 6: Find all methods (including subclasses like Interview)
+# Description: Lists all method instances and their types
+SELECT ?method ?methodType
+WHERE {
+    ?method rdf:type ?methodType .
+    ?methodType rdfs:subClassOf* :Method .
+}
+ORDER BY ?methodType ?method
+
+# Query 7: Get fields of study and their subject objects
+# Description: Shows the connection between fields and subject objects
+SELECT ?fieldOfStudy ?subjectObject
+WHERE {
+    ?fieldOfStudy rdf:type :FieldOfStudy .
+    ?fieldOfStudy :hasSubjectObjectApplication ?subjectObject .
+}
+ORDER BY ?fieldOfStudy ?subjectObject
+
+# Query 8: Find projects by theoretical framework
+# Description: Groups projects by their theoretical frameworks
+SELECT ?framework (COUNT(?project) AS ?projectCount)
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasTheoreticalFramework ?framework .
+}
+GROUP BY ?framework
+ORDER BY DESC(?projectCount)
+
+# Query 9: Complete researcher profile
+# Description: Gets all information about a researcher
+# Replace :Researcher1 with an actual researcher instance
+SELECT ?researcher ?fieldOfStudy ?method ?project
+WHERE {
+    ?researcher rdf:type :Researcher .
+    OPTIONAL { ?researcher :selects ?fieldOfStudy }
+    OPTIONAL { ?researcher :appliesMethod ?method }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+}
+ORDER BY ?researcher
+
+# Query 10: Find research objectives without questions
+# Description: Finds objectives that haven't been linked to questions yet
+SELECT ?objective
+WHERE {
+    ?objective rdf:type :ResearchObjective .
+    FILTER NOT EXISTS {
+        ?objective :poses ?question .
+    }
+}
+
+# Query 11: Count methods per researcher
+# Description: Shows how many methods each researcher uses
+SELECT ?researcher (COUNT(?method) AS ?methodCount)
+WHERE {
+    ?researcher rdf:type :Researcher .
+    ?researcher :appliesMethod ?method .
+}
+GROUP BY ?researcher
+ORDER BY DESC(?methodCount)
+
+# Query 12: Find projects with multiple researchers
+# Description: Identifies collaborative research projects
+SELECT ?project (COUNT(?researcher) AS ?researcherCount)
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasResearcher ?researcher .
+}
+GROUP BY ?project
+HAVING (COUNT(?researcher) > 1)
+ORDER BY DESC(?researcherCount)
+
+# Query 13: Get all Interview instances
+# Description: Lists all interview method instances
+SELECT ?interview
+WHERE {
+    ?interview rdf:type :Interview .
+}
+ORDER BY ?interview
+
+# Query 14: Research project workflow (Project → Objective → Question)
+# Description: Shows the complete formulation workflow
+SELECT ?project ?objective ?question
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasObjective ?objective .
+    ?objective :poses ?question .
+}
+ORDER BY ?project
+
