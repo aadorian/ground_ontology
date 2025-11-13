@@ -32,6 +32,7 @@ The `grounded_research_ontology.owl` file contains a comprehensive ontology repr
 - `CONTRIBUTING.md` - Guidelines for contributing to this project
 - `.gitmessage` - Commit message template for conventional commits
 - `sparql/` - Directory containing SPARQL queries organized by research phase and use case
+- `dl-queries/` - Directory containing DL (Description Logic) queries for Protege
 
 ## SPARQL Queries
 
@@ -159,7 +160,9 @@ WHERE {
 ORDER BY ?question
 ```
 
-For more queries, see the complete collection in the [`sparql/`](sparql/) directory:
+For more queries, see the complete collections:
+
+**SPARQL Queries** (in [`sparql/`](sparql/) directory):
 - [`01_basic_queries.sparql`](sparql/01_basic_queries.sparql) - 10 basic exploration queries
 - [`02_project_formulation.sparql`](sparql/02_project_formulation.sparql) - 14 queries for Phase 1
 - [`03_data_collection.sparql`](sparql/03_data_collection.sparql) - 14 queries for Phase 2
@@ -167,6 +170,61 @@ For more queries, see the complete collection in the [`sparql/`](sparql/) direct
 - [`05_findings.sparql`](sparql/05_findings.sparql) - 18 queries for Phase 4
 - [`06_cross_phase.sparql`](sparql/06_cross_phase.sparql) - 15 cross-phase queries
 - [`07_analytical_queries.sparql`](sparql/07_analytical_queries.sparql) - 17 analytical queries
+
+**DL Queries** (in [`dl-queries/`](dl-queries/) directory):
+- [`01_basic_class_queries.txt`](dl-queries/01_basic_class_queries.txt) - 23 basic class queries
+- [`02_project_formulation_queries.txt`](dl-queries/02_project_formulation_queries.txt) - 22 queries for Phase 1
+- [`03_data_collection_queries.txt`](dl-queries/03_data_collection_queries.txt) - 24 queries for Phase 2
+- [`04_consensus_queries.txt`](dl-queries/04_consensus_queries.txt) - 24 queries for Phase 3
+- [`05_findings_queries.txt`](dl-queries/05_findings_queries.txt) - 28 queries for Phase 4
+- [`06_complex_queries.txt`](dl-queries/06_complex_queries.txt) - 30 complex multi-phase queries
+- [`07_property_queries.txt`](dl-queries/07_property_queries.txt) - 40 property-based queries
+
+See the [DL Queries README](dl-queries/README.md) for information on using DL queries in Protege.
+
+### DL Query Examples
+
+DL queries use Description Logic syntax and are executed in Protege's DL Query tab. Here are some examples:
+
+**Find all research projects:**
+```
+ResearchProject
+```
+
+**Find research projects with objectives:**
+```
+hasObjective some ResearchObjective
+```
+
+**Find researchers that apply methods:**
+```
+appliesMethod some Method
+```
+
+**Find records that are interpreted:**
+```
+isInterpreted some Interpretation
+```
+
+**Find complete theory hierarchy:**
+```
+hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code))
+```
+
+**Find research questions in reformulation cycles:**
+```
+isReformulated some (toReformulation some ResearchQuestion)
+```
+
+**Find interpretations with codes:**
+```
+hasCodes some Code
+```
+
+**Find complete data to code path:**
+```
+isInterpreted some (hasCodes some Code)
+```
 
 ## Conventional Commits
 

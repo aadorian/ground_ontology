@@ -1,0 +1,93 @@
+# Complex DL Queries
+# Advanced class expressions and multi-phase queries
+
+# Query 1: Find research projects with complete workflow
+hasObjective some (poses some ResearchQuestion) and hasResearcher some (appliesMethod some Method) and hasResearcher some (selects some FieldOfStudy)
+
+# Query 2: Find complete data to code path
+isInterpreted some (hasCodes some Code)
+
+# Query 3: Find research questions in reformulation cycles
+isReformulated some (toReformulation some ResearchQuestion)
+
+# Query 4: Find researchers involved in projects with interpreted records
+hasResearcher some Researcher and (isInterpreted some Interpretation)
+
+# Query 5: Find methods applied to subject objects that have records
+isApplied some MethodOverSubjectObject and (hasSubjectObjects some Record)
+
+# Query 6: Find fields of study with subject objects that have interpreted records
+hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some Interpretation))
+
+# Query 7: Find research projects with reports
+hasResearcher some Researcher and (giveResponseTo some Report)
+
+# Query 8: Find complete research cycle: Project -> Question -> Reflexivity -> Question
+hasObjective some (poses some (isReformulated some (toReformulation some ResearchQuestion)))
+
+# Query 9: Find records that lead to codes through interpretation
+isInterpreted some (hasCodes some Code)
+
+# Query 10: Find subject objects with records that are interpreted
+hasSubjectObjects some (isInterpreted some Interpretation)
+
+# Query 11: Find bibliographies with records that are interpreted
+refersTo some (isInterpreted some Interpretation)
+
+# Query 12: Find researchers applying methods to subject objects
+appliesMethod some Method and (isApplied some MethodOverSubjectObject)
+
+# Query 13: Find research projects with complete findings
+hasResearcher some Researcher and (isReported some (hasElaboratedTheory some AnalyticCategory))
+
+# Query 14: Find interpretations that generate codes used in theory
+hasCodes some Code and (hasElaboratedDescriptiveCategory some Code)
+
+# Query 15: Find reflexivity connecting questions to reports
+isReformulated some (giveResponseTo some Report)
+
+# Query 16: Find complete workflow: Field -> Subject -> Record -> Interpretation -> Code
+hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))
+
+# Query 17: Find research projects with theoretical frameworks and reports
+hasTheoreticalFramework some TheoreticalFramework and (giveResponseTo some Report)
+
+# Query 18: Find methods used in projects with interpreted data
+appliesMethod some Method and (isInterpreted some Interpretation)
+
+# Query 19: Find research questions reformulated through reflexivity to reports
+isReformulated some ((giveResponseTo some Report) or (hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Query 20: Find complete theory development from data
+isInterpreted some (hasCodes some Code) and (hasElaboratedDescriptiveCategory some Code)
+
+# Query 21: Find researchers with complete research process
+selects some FieldOfStudy and appliesMethod some Method and (isInterpreted some Interpretation)
+
+# Query 22: Find records in bibliographies that are interpreted
+refersTo some (isInterpreted some Interpretation)
+
+# Query 23: Find subject objects with applied methods and records
+isApplied some MethodOverSubjectObject and (hasSubjectObjects some Record)
+
+# Query 24: Find research projects with all phases represented
+hasObjective some ResearchObjective and hasResearcher some Researcher and (isInterpreted some Interpretation) and (isReported some GroundedTheory)
+
+# Query 25: Find codes from both interpretation and category paths
+(hasCodes some Code) and (hasElaboratedDescriptiveCategory some Code)
+
+# Query 26: Find reflexivity with multiple connections
+(giveResponseTo some Report) and ((hasRelatedWork some Report) or (hasMethodology some Report))
+
+# Query 27: Find complete research methodology path
+hasResearcher some (selects some (hasSubjectObjectApplication some (hasSubjectObjects some (isInterpreted some (hasCodes some Code)))))
+
+# Query 28: Find research questions connected to findings
+isReformulated some (giveResponseTo some (isReported some GroundedTheory))
+
+# Query 29: Find methods applied to subject objects with interpreted records
+isApplied some MethodOverSubjectObject and (hasSubjectObjects some (isInterpreted some Interpretation))
+
+# Query 30: Find complete ontology coverage
+hasObjective some (poses some ResearchQuestion) and hasResearcher some (appliesMethod some Method) and (isInterpreted some (hasCodes some Code)) and (isReported some (hasElaboratedTheory some AnalyticCategory))
+

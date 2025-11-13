@@ -1,0 +1,87 @@
+# DL Queries for Phase 4: Findings
+# These queries explore reports, grounded theory, categories, and codes
+
+# Query 1: Find all reports
+Report
+
+# Query 2: Find reports that report grounded theories
+isReported some GroundedTheory
+
+# Query 3: Find grounded theories
+GroundedTheory
+
+# Query 4: Find grounded theories that elaborate to analytic categories
+hasElaboratedTheory some AnalyticCategory
+
+# Query 5: Find analytic categories
+AnalyticCategory
+
+# Query 6: Find analytic categories with relative categories
+hasRelativeAnalyticCategory some AnalyticCategory
+
+# Query 7: Find analytic categories that elaborate to descriptive categories
+hasElaboratedAnalyticCategory some DescriptiveCategory
+
+# Query 8: Find descriptive categories
+DescriptiveCategory
+
+# Query 9: Find descriptive categories with related categories
+hasRelatedDescriptiveCategory some DescriptiveCategory
+
+# Query 10: Find descriptive categories that elaborate to codes
+hasElaboratedDescriptiveCategory some Code
+
+# Query 11: Find codes
+Code
+
+# Query 12: Find codes with related codes
+hasRelatedCode some Code
+
+# Query 13: Find codes without relationships
+Code and not (hasRelatedCode some Code)
+
+# Query 14: Find complete theory hierarchy: GroundedTheory -> AnalyticCategory -> DescriptiveCategory -> Code
+hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code))
+
+# Query 15: Find codes from interpretations (direct path)
+hasCodes some Code
+
+# Query 16: Find codes from descriptive categories (hierarchical path)
+hasElaboratedDescriptiveCategory some Code
+
+# Query 17: Find codes from either path
+(hasCodes some Code) or (hasElaboratedDescriptiveCategory some Code)
+
+# Query 18: Find analytic categories in hierarchies
+AnalyticCategory and (hasRelativeAnalyticCategory some AnalyticCategory)
+
+# Query 19: Find descriptive categories in hierarchies
+DescriptiveCategory and (hasRelatedDescriptiveCategory some DescriptiveCategory)
+
+# Query 20: Find codes in networks
+Code and (hasRelatedCode some Code)
+
+# Query 21: Find grounded theories with complete hierarchies
+hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code))
+
+# Query 22: Find reports with grounded theories
+Report and (isReported some GroundedTheory)
+
+# Query 23: Find analytic categories without elaboration
+AnalyticCategory and not (hasElaboratedAnalyticCategory some DescriptiveCategory)
+
+# Query 24: Find descriptive categories without codes
+DescriptiveCategory and not (hasElaboratedDescriptiveCategory some Code)
+
+# Query 25: Find codes from interpretations
+Interpretation and (hasCodes some Code)
+
+# Query 26: Find core categories (if they exist)
+CoreCategory
+
+# Query 27: Find grounded theories reported in reports
+GroundedTheory and (isReported some Report)
+
+# Query 28: Find complete report structure
+isReported some (hasElaboratedTheory some (hasElaboratedAnalyticCategory some (hasElaboratedDescriptiveCategory some Code)))
+
