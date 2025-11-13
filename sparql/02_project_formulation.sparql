@@ -31,7 +31,6 @@ SELECT ?researcher ?fieldOfStudy
 WHERE {
     ?researcher rdf:type :Researcher .
     ?researcher :selects ?fieldOfStudy .
-    BIND(?researcher AS ?researcher)
 }
 ORDER BY ?researcher ?fieldOfStudy
 
