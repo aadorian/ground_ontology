@@ -1,0 +1,208 @@
+# SPARQL Queries for Phase 4: Findings
+# These queries explore reports, grounded theory, categories, and codes
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: List all reports
+# Description: Returns all report instances
+SELECT ?report
+WHERE {
+    ?report rdf:type :Report .
+}
+ORDER BY ?report
+
+# Query 2: Get reports and their grounded theories
+# Description: Shows which grounded theories are reported
+SELECT ?report ?groundedTheory
+WHERE {
+    ?report rdf:type :Report .
+    ?report :isReported ?groundedTheory .
+}
+ORDER BY ?report ?groundedTheory
+
+# Query 3: Grounded theory to analytic categories
+# Description: Shows the elaboration from grounded theory to analytic categories
+SELECT ?groundedTheory ?analyticCategory
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+}
+ORDER BY ?groundedTheory ?analyticCategory
+
+# Query 4: Analytic category hierarchy
+# Description: Shows related analytic categories (self-relations)
+SELECT ?analyticCategory1 ?analyticCategory2
+WHERE {
+    ?analyticCategory1 rdf:type :AnalyticCategory .
+    ?analyticCategory1 :hasRelativeAnalyticCategory ?analyticCategory2 .
+}
+ORDER BY ?analyticCategory1 ?analyticCategory2
+
+# Query 5: Analytic to descriptive categories
+# Description: Shows elaboration from analytic to descriptive categories
+SELECT ?analyticCategory ?descriptiveCategory
+WHERE {
+    ?analyticCategory rdf:type :AnalyticCategory .
+    ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+}
+ORDER BY ?analyticCategory ?descriptiveCategory
+
+# Query 6: Descriptive category hierarchy
+# Description: Shows related descriptive categories (self-relations)
+SELECT ?descriptiveCategory1 ?descriptiveCategory2
+WHERE {
+    ?descriptiveCategory1 rdf:type :DescriptiveCategory .
+    ?descriptiveCategory1 :hasRelatedDescriptiveCategory ?descriptiveCategory2 .
+}
+ORDER BY ?descriptiveCategory1 ?descriptiveCategory2
+
+# Query 7: Descriptive categories to codes
+# Description: Shows elaboration from descriptive categories to codes
+SELECT ?descriptiveCategory ?code
+WHERE {
+    ?descriptiveCategory rdf:type :DescriptiveCategory .
+    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+}
+ORDER BY ?descriptiveCategory ?code
+
+# Query 8: Code relationships
+# Description: Shows related codes (self-relations)
+SELECT ?code1 ?code2
+WHERE {
+    ?code1 rdf:type :Code .
+    ?code1 :hasRelatedCode ?code2 .
+}
+ORDER BY ?code1 ?code2
+
+# Query 9: Complete theory hierarchy (GroundedTheory → AnalyticCategory → DescriptiveCategory → Code)
+# Description: Shows the full hierarchical path from theory to codes
+SELECT ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+    ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+}
+ORDER BY ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+
+# Query 10: Count categories per grounded theory
+# Description: Shows how many analytic categories each grounded theory has
+SELECT ?groundedTheory (COUNT(?analyticCategory) AS ?categoryCount)
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+}
+GROUP BY ?groundedTheory
+ORDER BY DESC(?categoryCount)
+
+# Query 11: Count codes per descriptive category
+# Description: Shows how many codes each descriptive category has
+SELECT ?descriptiveCategory (COUNT(?code) AS ?codeCount)
+WHERE {
+    ?descriptiveCategory rdf:type :DescriptiveCategory .
+    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+}
+GROUP BY ?descriptiveCategory
+ORDER BY DESC(?codeCount)
+
+# Query 12: Find codes without relationships
+# Description: Identifies codes that aren't connected to other codes
+SELECT ?code
+WHERE {
+    ?code rdf:type :Code .
+    FILTER NOT EXISTS {
+        ?code :hasRelatedCode ?otherCode .
+    }
+    FILTER NOT EXISTS {
+        ?otherCode :hasRelatedCode ?code .
+    }
+    FILTER NOT EXISTS {
+        ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+    }
+    FILTER NOT EXISTS {
+        ?interpretation :hasCodes ?code .
+    }
+}
+ORDER BY ?code
+
+# Query 13: Codes from interpretations (direct path)
+# Description: Shows codes that come directly from interpretations
+SELECT ?interpretation ?code
+WHERE {
+    ?interpretation rdf:type :Interpretation .
+    ?interpretation :hasCodes ?code .
+}
+ORDER BY ?interpretation ?code
+
+# Query 14: All codes (from both paths)
+# Description: Shows all codes whether from interpretations or descriptive categories
+SELECT ?code ?sourceType ?source
+WHERE {
+    ?code rdf:type :Code .
+    {
+        ?interpretation :hasCodes ?code .
+        BIND("Interpretation" AS ?sourceType)
+        BIND(?interpretation AS ?source)
+    } UNION {
+        ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+        BIND("DescriptiveCategory" AS ?sourceType)
+        BIND(?descriptiveCategory AS ?source)
+    }
+}
+ORDER BY ?code ?sourceType
+
+# Query 15: Complete report structure
+# Description: Shows the full structure from report to codes
+SELECT ?report ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+WHERE {
+    ?report rdf:type :Report .
+    OPTIONAL {
+        ?report :isReported ?groundedTheory .
+        OPTIONAL {
+            ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+            OPTIONAL {
+                ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+                OPTIONAL {
+                    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+                }
+            }
+        }
+    }
+}
+ORDER BY ?report ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+
+# Query 16: Find all CoreCategory instances (if they exist)
+# Description: Lists all core category instances
+SELECT ?coreCategory
+WHERE {
+    ?coreCategory rdf:type :CoreCategory .
+}
+ORDER BY ?coreCategory
+
+# Query 17: Analytic categories with multiple related categories
+# Description: Identifies analytic categories with many relationships
+SELECT ?analyticCategory (COUNT(?relatedCategory) AS ?relationCount)
+WHERE {
+    ?analyticCategory rdf:type :AnalyticCategory .
+    ?analyticCategory :hasRelativeAnalyticCategory ?relatedCategory .
+}
+GROUP BY ?analyticCategory
+HAVING (COUNT(?relatedCategory) > 1)
+ORDER BY DESC(?relationCount)
+
+# Query 18: Codes network (all code relationships)
+# Description: Shows the complete network of code relationships
+SELECT ?code1 ?code2
+WHERE {
+    {
+        ?code1 rdf:type :Code .
+        ?code1 :hasRelatedCode ?code2 .
+    } UNION {
+        ?code2 rdf:type :Code .
+        ?code2 :hasRelatedCode ?code1 .
+    }
+}
+ORDER BY ?code1 ?code2
+

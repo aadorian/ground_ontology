@@ -1,0 +1,110 @@
+# Basic SPARQL Queries for Grounded Research Ontology
+# These queries help explore the ontology structure
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+# Query 1: List all classes in the ontology
+# Description: Returns all OWL classes defined in the ontology
+SELECT DISTINCT ?class ?label
+WHERE {
+    ?class rdf:type owl:Class .
+    OPTIONAL { ?class rdfs:label ?label }
+    FILTER (!isBlank(?class))
+    FILTER (STRSTARTS(STR(?class), "http://www.semanticweb.org/grounded_research_ontology#"))
+}
+ORDER BY ?class
+
+# Query 2: List all object properties
+# Description: Returns all object properties with their labels
+SELECT DISTINCT ?property ?label
+WHERE {
+    ?property rdf:type owl:ObjectProperty .
+    OPTIONAL { ?property rdfs:label ?label }
+    FILTER (STRSTARTS(STR(?property), "http://www.semanticweb.org/grounded_research_ontology#"))
+}
+ORDER BY ?property
+
+# Query 3: Get property domains and ranges
+# Description: Shows what classes each property connects
+SELECT DISTINCT ?property ?propertyLabel ?domain ?domainLabel ?range ?rangeLabel
+WHERE {
+    ?property rdf:type owl:ObjectProperty .
+    ?property rdfs:domain ?domain .
+    ?property rdfs:range ?range .
+    OPTIONAL { ?property rdfs:label ?propertyLabel }
+    OPTIONAL { ?domain rdfs:label ?domainLabel }
+    OPTIONAL { ?range rdfs:label ?rangeLabel }
+    FILTER (STRSTARTS(STR(?property), "http://www.semanticweb.org/grounded_research_ontology#"))
+}
+ORDER BY ?property
+
+# Query 4: Count instances of each class
+# Description: Counts how many instances exist for each class
+SELECT ?class (COUNT(?instance) AS ?count)
+WHERE {
+    ?instance rdf:type ?class .
+    FILTER (STRSTARTS(STR(?class), "http://www.semanticweb.org/grounded_research_ontology#"))
+}
+GROUP BY ?class
+ORDER BY DESC(?count)
+
+# Query 5: List all instances with their types
+# Description: Shows all individuals and their class types
+SELECT DISTINCT ?instance ?class
+WHERE {
+    ?instance rdf:type ?class .
+    FILTER (STRSTARTS(STR(?class), "http://www.semanticweb.org/grounded_research_ontology#"))
+    FILTER (!isBlank(?instance))
+}
+ORDER BY ?class ?instance
+
+# Query 6: Find subclasses
+# Description: Shows the class hierarchy
+SELECT ?subclass ?subclassLabel ?superclass ?superclassLabel
+WHERE {
+    ?subclass rdfs:subClassOf ?superclass .
+    OPTIONAL { ?subclass rdfs:label ?subclassLabel }
+    OPTIONAL { ?superclass rdfs:label ?superclassLabel }
+    FILTER (STRSTARTS(STR(?subclass), "http://www.semanticweb.org/grounded_research_ontology#"))
+    FILTER (STRSTARTS(STR(?superclass), "http://www.semanticweb.org/grounded_research_ontology#"))
+}
+ORDER BY ?subclass
+
+# Query 7: Get all properties for a specific class
+# Description: Find all properties that have a specific class as domain
+# Replace :ResearchProject with any class you want to explore
+SELECT DISTINCT ?property ?propertyLabel ?range ?rangeLabel
+WHERE {
+    ?property rdfs:domain :ResearchProject .
+    ?property rdfs:range ?range .
+    OPTIONAL { ?property rdfs:label ?propertyLabel }
+    OPTIONAL { ?range rdfs:label ?rangeLabel }
+}
+ORDER BY ?property
+
+# Query 8: Find inverse relationships
+# Description: Identifies properties that might be inverses
+SELECT ?property1 ?property2
+WHERE {
+    ?property1 owl:inverseOf ?property2 .
+}
+
+# Query 9: List all Record subclasses
+# Description: Shows all types of records in the ontology
+SELECT ?recordType ?recordTypeLabel
+WHERE {
+    ?recordType rdfs:subClassOf :Record .
+    OPTIONAL { ?recordType rdfs:label ?recordTypeLabel }
+}
+ORDER BY ?recordType
+
+# Query 10: Get ontology metadata
+# Description: Returns basic information about the ontology
+SELECT ?predicate ?object
+WHERE {
+    <http://www.semanticweb.org/grounded_research_ontology> ?predicate ?object .
+}
+

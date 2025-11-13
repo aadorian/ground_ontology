@@ -29,7 +29,144 @@ The `grounded_research_ontology.owl` file contains a comprehensive ontology repr
 - `grounded_research_ontology.owl` - Main OWL ontology file
 - `ONTOLOGY_DOCUMENTATION.md` - Detailed ontology documentation
 - `PROTEGE_SETUP.md` - Protege setup and usage instructions
+- `CONTRIBUTING.md` - Guidelines for contributing to this project
 - `.gitmessage` - Commit message template for conventional commits
+- `sparql/` - Directory containing SPARQL queries organized by research phase and use case
+
+## SPARQL Queries
+
+This repository includes a comprehensive collection of SPARQL queries for querying the ontology. The queries are organized in the `sparql/` directory:
+
+- **Basic queries** - Explore ontology structure, classes, and properties
+- **Phase-specific queries** - Queries for each of the four research phases
+- **Cross-phase queries** - Queries spanning multiple phases
+- **Analytical queries** - Complex queries for insights and statistics
+
+See the [SPARQL Queries README](sparql/README.md) for detailed information on how to use these queries in Protege or other SPARQL endpoints.
+
+### Quick Example Queries
+
+Here are some example queries you can try immediately. All queries use the namespace prefix:
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+```
+
+**Find all research projects:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?project
+WHERE {
+    ?project rdf:type :ResearchProject .
+}
+ORDER BY ?project
+```
+
+**Get research projects with their objectives:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?project ?objective
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasObjective ?objective .
+}
+ORDER BY ?project
+```
+
+**Find all methods:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?method
+WHERE {
+    ?method rdf:type :Method .
+}
+ORDER BY ?method
+```
+
+**List all records:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?record ?recordType
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+}
+ORDER BY ?recordType ?record
+```
+
+**Get records and their interpretations:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?record ?interpretation
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    ?record :isInterpreted ?interpretation .
+}
+ORDER BY ?record
+```
+
+**Find all codes:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?code
+WHERE {
+    ?code rdf:type :Code .
+}
+ORDER BY ?code
+```
+
+**Complete theory hierarchy (GroundedTheory → AnalyticCategory → DescriptiveCategory → Code):**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+    ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+}
+ORDER BY ?groundedTheory ?analyticCategory ?descriptiveCategory ?code
+```
+
+**Research question reformulation cycle:**
+```sparql
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?question ?reflexivity ?reformulatedQuestion
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    ?question :isReformulated ?reflexivity .
+    ?reflexivity :toReformulation ?reformulatedQuestion .
+}
+ORDER BY ?question
+```
+
+For more queries, see the complete collection in the [`sparql/`](sparql/) directory:
+- [`01_basic_queries.sparql`](sparql/01_basic_queries.sparql) - 10 basic exploration queries
+- [`02_project_formulation.sparql`](sparql/02_project_formulation.sparql) - 14 queries for Phase 1
+- [`03_data_collection.sparql`](sparql/03_data_collection.sparql) - 14 queries for Phase 2
+- [`04_consensus.sparql`](sparql/04_consensus.sparql) - 15 queries for Phase 3
+- [`05_findings.sparql`](sparql/05_findings.sparql) - 18 queries for Phase 4
+- [`06_cross_phase.sparql`](sparql/06_cross_phase.sparql) - 15 cross-phase queries
+- [`07_analytical_queries.sparql`](sparql/07_analytical_queries.sparql) - 17 analytical queries
 
 ## Conventional Commits
 
@@ -80,4 +217,15 @@ refactor(utils): simplify date formatting logic
 ### Validation
 
 A Git hook automatically validates commit messages to ensure they follow the conventional commit format.
+
+## Contributing
+
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- How to set up your development environment
+- Our code of conduct
+- The pull request process
+- How to report bugs and request features
+
+When creating issues or pull requests, please follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
 

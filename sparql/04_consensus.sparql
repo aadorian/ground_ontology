@@ -1,0 +1,174 @@
+# SPARQL Queries for Phase 3: Consensus
+# These queries explore reflexivity, interpretation, and method application
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: List all interpretations
+# Description: Returns all interpretation instances
+SELECT ?interpretation
+WHERE {
+    ?interpretation rdf:type :Interpretation .
+}
+ORDER BY ?interpretation
+
+# Query 2: Get records and their interpretations
+# Description: Shows which records have been interpreted
+SELECT ?record ?recordType ?interpretation
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    ?record :isInterpreted ?interpretation .
+}
+ORDER BY ?record ?interpretation
+
+# Query 3: Find interpretations with codes
+# Description: Shows interpretations that have generated codes
+SELECT ?interpretation ?code
+WHERE {
+    ?interpretation rdf:type :Interpretation .
+    ?interpretation :hasCodes ?code .
+}
+ORDER BY ?interpretation ?code
+
+# Query 4: List all reflexivity instances
+# Description: Returns all reflexivity processes
+SELECT ?reflexivity
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+}
+ORDER BY ?reflexivity
+
+# Query 5: Research question reformulation cycle
+# Description: Shows how research questions are reformulated through reflexivity
+SELECT ?question ?reflexivity ?reformulatedQuestion
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    ?question :isReformulated ?reflexivity .
+    ?reflexivity :toReformulation ?reformulatedQuestion .
+}
+ORDER BY ?question
+
+# Query 6: Reflexivity and reports
+# Description: Shows how reflexivity connects to reports
+SELECT ?reflexivity ?report
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+    ?reflexivity :giveResponseTo ?report .
+}
+ORDER BY ?reflexivity ?report
+
+# Query 7: Reflexivity with related work
+# Description: Shows reflexivity processes that reference related work
+SELECT ?reflexivity ?report
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+    ?reflexivity :hasRelatedWork ?report .
+}
+ORDER BY ?reflexivity ?report
+
+# Query 8: Reflexivity with methodology
+# Description: Shows reflexivity processes that include methodology
+SELECT ?reflexivity ?report
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+    ?reflexivity :hasMethodology ?report .
+}
+ORDER BY ?reflexivity ?report
+
+# Query 9: Method over subject object
+# Description: Lists all method applications over subject objects
+SELECT ?methodOverSubjectObject ?subjectObject
+WHERE {
+    ?methodOverSubjectObject rdf:type :MethodOverSubjectObject .
+    ?subjectObject :isApplied ?methodOverSubjectObject .
+}
+ORDER BY ?subjectObject ?methodOverSubjectObject
+
+# Query 10: Complete interpretation workflow
+# Description: Shows the path from record to interpretation to codes
+SELECT ?record ?interpretation ?code
+WHERE {
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+}
+ORDER BY ?record ?interpretation ?code
+
+# Query 11: Interpretations without codes
+# Description: Finds interpretations that haven't generated codes yet
+SELECT ?interpretation ?record
+WHERE {
+    ?interpretation rdf:type :Interpretation .
+    ?record :isInterpreted ?interpretation .
+    FILTER NOT EXISTS {
+        ?interpretation :hasCodes ?code .
+    }
+}
+ORDER BY ?interpretation
+
+# Query 12: Count codes per interpretation
+# Description: Shows how many codes each interpretation has generated
+SELECT ?interpretation (COUNT(?code) AS ?codeCount)
+WHERE {
+    ?interpretation rdf:type :Interpretation .
+    ?interpretation :hasCodes ?code .
+}
+GROUP BY ?interpretation
+ORDER BY DESC(?codeCount)
+
+# Query 13: Reflexivity connections to reports
+# Description: Shows all ways reflexivity connects to reports
+SELECT ?reflexivity ?report ?connectionType
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+    {
+        ?reflexivity :giveResponseTo ?report .
+        BIND("givesResponseTo" AS ?connectionType)
+    } UNION {
+        ?reflexivity :hasRelatedWork ?report .
+        BIND("hasRelatedWork" AS ?connectionType)
+    } UNION {
+        ?reflexivity :hasMethodology ?report .
+        BIND("hasMethodology" AS ?connectionType)
+    }
+}
+ORDER BY ?reflexivity ?connectionType
+
+# Query 14: Research questions involved in reformulation
+# Description: Shows all research questions that have been reformulated
+SELECT ?originalQuestion ?reflexivity ?reformulatedQuestion
+WHERE {
+    ?originalQuestion rdf:type :ResearchQuestion .
+    ?originalQuestion :isReformulated ?reflexivity .
+    OPTIONAL {
+        ?reflexivity :toReformulation ?reformulatedQuestion .
+    }
+}
+ORDER BY ?originalQuestion
+
+# Query 15: Complete consensus phase overview
+# Description: Shows all entities in the consensus phase and their connections
+SELECT ?entity ?entityType ?relatedEntity ?relation
+WHERE {
+    {
+        ?entity rdf:type :Reflexivity .
+        BIND("Reflexivity" AS ?entityType)
+        OPTIONAL {
+            ?entity :toReformulation ?relatedEntity .
+            BIND("toReformulation" AS ?relation)
+        }
+    } UNION {
+        ?entity rdf:type :Interpretation .
+        BIND("Interpretation" AS ?entityType)
+        OPTIONAL {
+            ?entity :hasCodes ?relatedEntity .
+            BIND("hasCodes" AS ?relation)
+        }
+    } UNION {
+        ?entity rdf:type :MethodOverSubjectObject .
+        BIND("MethodOverSubjectObject" AS ?entityType)
+    }
+}
+ORDER BY ?entityType ?entity
+

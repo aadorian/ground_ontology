@@ -1,0 +1,217 @@
+# SPARQL Queries Spanning Multiple Phases
+# These queries explore relationships and workflows across research phases
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: Complete research cycle (Project → Objective → Question → Reflexivity → Question)
+# Description: Shows the reformulation cycle from project formulation to consensus
+SELECT ?project ?objective ?question ?reflexivity ?reformulatedQuestion
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasObjective ?objective .
+    ?objective :poses ?question .
+    ?question :isReformulated ?reflexivity .
+    OPTIONAL {
+        ?reflexivity :toReformulation ?reformulatedQuestion .
+    }
+}
+ORDER BY ?project ?question
+
+# Query 2: Data flow from collection to findings
+# Description: Tracks data from records through interpretation to codes
+SELECT ?record ?recordType ?interpretation ?code
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+}
+ORDER BY ?record ?interpretation ?code
+
+# Query 3: Field of study to codes path
+# Description: Shows the complete path from field selection to final codes
+SELECT ?fieldOfStudy ?subjectObject ?record ?interpretation ?code
+WHERE {
+    ?fieldOfStudy rdf:type :FieldOfStudy .
+    ?fieldOfStudy :hasSubjectObjectApplication ?subjectObject .
+    ?subjectObject :hasSubjectObjects ?record .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+}
+ORDER BY ?fieldOfStudy ?subjectObject ?record
+
+# Query 4: Researcher to findings path
+# Description: Tracks from researcher through their work to final reports
+SELECT ?researcher ?project ?report ?groundedTheory
+WHERE {
+    ?researcher rdf:type :Researcher .
+    ?project :hasResearcher ?researcher .
+    ?reflexivity :giveResponseTo ?report .
+    ?report :isReported ?groundedTheory .
+    # Note: This query assumes reflexivity is connected to the project
+    # You may need to adjust based on your actual data model
+}
+ORDER BY ?researcher ?project ?report
+
+# Query 5: Method application workflow
+# Description: Shows how methods are applied from formulation through consensus
+SELECT ?researcher ?method ?subjectObject ?methodOverSubjectObject
+WHERE {
+    ?researcher rdf:type :Researcher .
+    ?researcher :appliesMethod ?method .
+    ?fieldOfStudy :hasSubjectObjectApplication ?subjectObject .
+    ?subjectObject :isApplied ?methodOverSubjectObject .
+    # Note: This assumes a connection between method and methodOverSubjectObject
+}
+ORDER BY ?researcher ?method
+
+# Query 6: Research question to codes (complete cycle)
+# Description: Shows how research questions lead to codes through the research process
+SELECT ?question ?reflexivity ?record ?interpretation ?code
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    ?question :isReformulated ?reflexivity .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    # Note: This shows parallel paths; actual connections may vary
+}
+ORDER BY ?question ?code
+
+# Query 7: Bibliography to grounded theory
+# Description: Tracks from bibliography references to final theories
+SELECT ?bibliography ?record ?interpretation ?code ?groundedTheory
+WHERE {
+    ?bibliography rdf:type :Bibliography .
+    ?bibliography :refersTo ?record .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    ?report :isReported ?groundedTheory .
+    # Note: Connection between code and grounded theory may be indirect
+}
+ORDER BY ?bibliography ?record
+
+# Query 8: Complete project workflow
+# Description: Shows the entire workflow from project to findings
+SELECT ?project ?objective ?question ?record ?interpretation ?code ?report ?groundedTheory
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasObjective ?objective .
+    ?objective :poses ?question .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    ?report :isReported ?groundedTheory .
+    # Note: This shows all entities but connections may need refinement
+}
+ORDER BY ?project ?code
+
+# Query 9: Reflexivity connections across phases
+# Description: Shows how reflexivity connects to both formulation and findings
+SELECT ?question ?reflexivity ?reformulatedQuestion ?report
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    ?question :isReformulated ?reflexivity .
+    OPTIONAL {
+        ?reflexivity :toReformulation ?reformulatedQuestion .
+    }
+    OPTIONAL {
+        ?reflexivity :giveResponseTo ?report .
+    }
+}
+ORDER BY ?question ?reflexivity
+
+# Query 10: Records to reports path
+# Description: Shows how records contribute to final reports
+SELECT ?record ?recordType ?interpretation ?reflexivity ?report
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    ?record :isInterpreted ?interpretation .
+    ?reflexivity :giveResponseTo ?report .
+    # Note: Connection between interpretation and reflexivity may need clarification
+}
+ORDER BY ?record ?report
+
+# Query 11: Theory development from data
+# Description: Complete path from data collection to theory development
+SELECT ?record ?interpretation ?code ?descriptiveCategory ?analyticCategory ?groundedTheory
+WHERE {
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+    ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+    ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+}
+ORDER BY ?record ?groundedTheory
+
+# Query 12: Research project summary
+# Description: Provides a comprehensive summary of a research project
+SELECT ?project ?objective ?researcher ?method ?record ?report
+WHERE {
+    ?project rdf:type :ResearchProject .
+    OPTIONAL { ?project :hasObjective ?objective }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+    OPTIONAL { ?researcher :appliesMethod ?method }
+    OPTIONAL { ?record rdf:type :Record }
+    OPTIONAL { ?report rdf:type :Report }
+}
+ORDER BY ?project
+
+# Query 13: Cyclical reformulation tracking
+# Description: Tracks multiple reformulation cycles
+SELECT ?question1 ?reflexivity1 ?question2 ?reflexivity2 ?question3
+WHERE {
+    ?question1 :isReformulated ?reflexivity1 .
+    ?reflexivity1 :toReformulation ?question2 .
+    ?question2 :isReformulated ?reflexivity2 .
+    OPTIONAL {
+        ?reflexivity2 :toReformulation ?question3 .
+    }
+}
+ORDER BY ?question1
+
+# Query 14: Cross-phase entity counts
+# Description: Counts entities across all phases for a project overview
+SELECT 
+    (COUNT(DISTINCT ?project) AS ?projects)
+    (COUNT(DISTINCT ?researcher) AS ?researchers)
+    (COUNT(DISTINCT ?record) AS ?records)
+    (COUNT(DISTINCT ?interpretation) AS ?interpretations)
+    (COUNT(DISTINCT ?code) AS ?codes)
+    (COUNT(DISTINCT ?report) AS ?reports)
+WHERE {
+    OPTIONAL { ?project rdf:type :ResearchProject }
+    OPTIONAL { ?researcher rdf:type :Researcher }
+    OPTIONAL { ?record rdf:type/rdfs:subClassOf* :Record }
+    OPTIONAL { ?interpretation rdf:type :Interpretation }
+    OPTIONAL { ?code rdf:type :Code }
+    OPTIONAL { ?report rdf:type :Report }
+}
+
+# Query 15: Complete research methodology path
+# Description: Shows the full methodology from formulation through findings
+SELECT 
+    ?project 
+    ?researcher 
+    ?method 
+    ?fieldOfStudy 
+    ?subjectObject 
+    ?record 
+    ?interpretation 
+    ?code 
+    ?groundedTheory
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?project :hasResearcher ?researcher .
+    ?researcher :appliesMethod ?method .
+    ?researcher :selects ?fieldOfStudy .
+    ?fieldOfStudy :hasSubjectObjectApplication ?subjectObject .
+    ?subjectObject :hasSubjectObjects ?record .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    ?report :isReported ?groundedTheory .
+    # Note: Some connections may need adjustment based on actual data
+}
+ORDER BY ?project
+

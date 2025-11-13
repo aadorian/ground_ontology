@@ -1,0 +1,297 @@
+# Complex Analytical SPARQL Queries
+# These queries provide insights, statistics, and complex analyses
+
+PREFIX : <http://www.semanticweb.org/grounded_research_ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Query 1: Research project completeness score
+# Description: Evaluates how complete a research project is across all phases
+SELECT ?project 
+    (COUNT(DISTINCT ?objective) AS ?objectives)
+    (COUNT(DISTINCT ?researcher) AS ?researchers)
+    (COUNT(DISTINCT ?question) AS ?questions)
+    (COUNT(DISTINCT ?record) AS ?records)
+    (COUNT(DISTINCT ?interpretation) AS ?interpretations)
+    (COUNT(DISTINCT ?code) AS ?codes)
+    (COUNT(DISTINCT ?report) AS ?reports)
+WHERE {
+    ?project rdf:type :ResearchProject .
+    OPTIONAL { ?project :hasObjective ?objective }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+    OPTIONAL { ?objective :poses ?question }
+    OPTIONAL { ?record rdf:type/rdfs:subClassOf* :Record }
+    OPTIONAL { ?record :isInterpreted ?interpretation }
+    OPTIONAL { ?interpretation :hasCodes ?code }
+    OPTIONAL { ?report rdf:type :Report }
+}
+GROUP BY ?project
+ORDER BY ?project
+
+# Query 2: Data collection efficiency
+# Description: Shows how many interpretations and codes come from each record type
+SELECT ?recordType 
+    (COUNT(DISTINCT ?record) AS ?totalRecords)
+    (COUNT(DISTINCT ?interpretation) AS ?interpretedRecords)
+    (COUNT(DISTINCT ?code) AS ?codesGenerated)
+WHERE {
+    ?record rdf:type ?recordType .
+    ?recordType rdfs:subClassOf* :Record .
+    OPTIONAL { ?record :isInterpreted ?interpretation }
+    OPTIONAL { ?interpretation :hasCodes ?code }
+}
+GROUP BY ?recordType
+ORDER BY DESC(?totalRecords)
+
+# Query 3: Code generation paths analysis
+# Description: Compares codes from interpretations vs. descriptive categories
+SELECT 
+    (COUNT(DISTINCT ?codeFromInterpretation) AS ?codesFromInterpretations)
+    (COUNT(DISTINCT ?codeFromCategory) AS ?codesFromCategories)
+    (COUNT(DISTINCT ?codeBoth) AS ?codesFromBoth)
+WHERE {
+    OPTIONAL {
+        ?interpretation :hasCodes ?codeFromInterpretation .
+    }
+    OPTIONAL {
+        ?descriptiveCategory :hasElaboratedDescriptiveCategory ?codeFromCategory .
+    }
+    OPTIONAL {
+        ?interpretation :hasCodes ?codeBoth .
+        ?descriptiveCategory :hasElaboratedDescriptiveCategory ?codeBoth .
+    }
+}
+
+# Query 4: Researcher productivity metrics
+# Description: Shows productivity metrics for each researcher
+SELECT ?researcher 
+    (COUNT(DISTINCT ?method) AS ?methodsUsed)
+    (COUNT(DISTINCT ?fieldOfStudy) AS ?fieldsStudied)
+    (COUNT(DISTINCT ?project) AS ?projectsInvolved)
+WHERE {
+    ?researcher rdf:type :Researcher .
+    OPTIONAL { ?researcher :appliesMethod ?method }
+    OPTIONAL { ?researcher :selects ?fieldOfStudy }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+}
+GROUP BY ?researcher
+ORDER BY DESC(?projectsInvolved)
+
+# Query 5: Theory development depth
+# Description: Measures the depth of theory development from grounded theory to codes
+SELECT ?groundedTheory 
+    (COUNT(DISTINCT ?analyticCategory) AS ?analyticCategories)
+    (COUNT(DISTINCT ?descriptiveCategory) AS ?descriptiveCategories)
+    (COUNT(DISTINCT ?code) AS ?codes)
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    OPTIONAL {
+        ?groundedTheory :hasElaboratedTheory ?analyticCategory .
+        OPTIONAL {
+            ?analyticCategory :hasElaboratedAnalyticCategory ?descriptiveCategory .
+            OPTIONAL {
+                ?descriptiveCategory :hasElaboratedDescriptiveCategory ?code .
+            }
+        }
+    }
+}
+GROUP BY ?groundedTheory
+ORDER BY DESC(?codes)
+
+# Query 6: Reformulation frequency
+# Description: Identifies research questions that have been reformulated multiple times
+SELECT ?question (COUNT(?reflexivity) AS ?reformulationCount)
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    ?question :isReformulated ?reflexivity .
+}
+GROUP BY ?question
+HAVING (COUNT(?reflexivity) > 1)
+ORDER BY DESC(?reformulationCount)
+
+# Query 7: Record interpretation rate
+# Description: Shows what percentage of records have been interpreted
+SELECT 
+    (COUNT(DISTINCT ?allRecords) AS ?totalRecords)
+    (COUNT(DISTINCT ?interpretedRecords) AS ?interpretedRecords)
+    ((COUNT(DISTINCT ?interpretedRecords) * 100.0 / COUNT(DISTINCT ?allRecords)) AS ?interpretationRate)
+WHERE {
+    ?allRecords rdf:type/rdfs:subClassOf* :Record .
+    OPTIONAL {
+        ?interpretedRecords :isInterpreted ?interpretation .
+        FILTER(?interpretedRecords = ?allRecords)
+    }
+}
+
+# Query 8: Code network analysis
+# Description: Identifies highly connected codes in the network
+SELECT ?code (COUNT(?relatedCode) AS ?connectionCount)
+WHERE {
+    ?code rdf:type :Code .
+    {
+        ?code :hasRelatedCode ?relatedCode .
+    } UNION {
+        ?relatedCode :hasRelatedCode ?code .
+    }
+}
+GROUP BY ?code
+ORDER BY DESC(?connectionCount)
+
+# Query 9: Research phase distribution
+# Description: Shows distribution of entities across research phases
+SELECT 
+    "Project Formulation" AS ?phase (COUNT(DISTINCT ?project) AS ?entityCount)
+WHERE { ?project rdf:type :ResearchProject }
+UNION
+SELECT 
+    "Data Collection" AS ?phase (COUNT(DISTINCT ?record) AS ?entityCount)
+WHERE { ?record rdf:type/rdfs:subClassOf* :Record }
+UNION
+SELECT 
+    "Consensus" AS ?phase (COUNT(DISTINCT ?interpretation) AS ?entityCount)
+WHERE { ?interpretation rdf:type :Interpretation }
+UNION
+SELECT 
+    "Findings" AS ?phase (COUNT(DISTINCT ?report) AS ?entityCount)
+WHERE { ?report rdf:type :Report }
+
+# Query 10: Method usage statistics
+# Description: Shows which methods are most commonly used
+SELECT ?method (COUNT(DISTINCT ?researcher) AS ?researcherCount)
+WHERE {
+    ?researcher :appliesMethod ?method .
+}
+GROUP BY ?method
+ORDER BY DESC(?researcherCount)
+
+# Query 11: Complete research workflow paths
+# Description: Finds complete paths from project to codes
+SELECT ?project ?record ?code
+WHERE {
+    ?project rdf:type :ResearchProject .
+    ?record :isInterpreted ?interpretation .
+    ?interpretation :hasCodes ?code .
+    # This assumes a connection exists; adjust based on your data
+}
+ORDER BY ?project ?code
+
+# Query 12: Reflexivity impact analysis
+# Description: Measures how reflexivity connects to other phases
+SELECT ?reflexivity 
+    (COUNT(DISTINCT ?question) AS ?questionsReformulated)
+    (COUNT(DISTINCT ?report) AS ?reportsGenerated)
+WHERE {
+    ?reflexivity rdf:type :Reflexivity .
+    OPTIONAL { ?question :isReformulated ?reflexivity }
+    OPTIONAL { ?reflexivity :giveResponseTo ?report }
+    OPTIONAL { ?reflexivity :hasRelatedWork ?report }
+    OPTIONAL { ?reflexivity :hasMethodology ?report }
+}
+GROUP BY ?reflexivity
+ORDER BY DESC(?reportsGenerated)
+
+# Query 13: Category hierarchy depth
+# Description: Measures the depth of category hierarchies
+SELECT ?groundedTheory 
+    (MAX(?depth) AS ?maxDepth)
+WHERE {
+    ?groundedTheory rdf:type :GroundedTheory .
+    {
+        SELECT ?groundedTheory ?category (COUNT(?path) AS ?depth)
+        WHERE {
+            ?groundedTheory :hasElaboratedTheory ?category .
+            ?category :hasElaboratedAnalyticCategory* ?path .
+        }
+        GROUP BY ?groundedTheory ?category
+    }
+}
+GROUP BY ?groundedTheory
+ORDER BY DESC(?maxDepth)
+
+# Query 14: Research question lifecycle
+# Description: Tracks the complete lifecycle of research questions
+SELECT ?question 
+    (COUNT(DISTINCT ?reflexivity) AS ?reformulations)
+    (COUNT(DISTINCT ?reformulatedQuestion) AS ?newQuestions)
+WHERE {
+    ?question rdf:type :ResearchQuestion .
+    OPTIONAL {
+        ?question :isReformulated ?reflexivity .
+        OPTIONAL {
+            ?reflexivity :toReformulation ?reformulatedQuestion .
+        }
+    }
+}
+GROUP BY ?question
+ORDER BY DESC(?reformulations)
+
+# Query 15: Bibliography utilization
+# Description: Shows how bibliographies are used in the research process
+SELECT ?bibliography 
+    (COUNT(DISTINCT ?record) AS ?recordsReferenced)
+    (COUNT(DISTINCT ?interpretation) AS ?interpretationsFromRecords)
+WHERE {
+    ?bibliography rdf:type :Bibliography .
+    ?bibliography :refersTo ?record .
+    OPTIONAL {
+        ?record :isInterpreted ?interpretation .
+    }
+}
+GROUP BY ?bibliography
+ORDER BY DESC(?recordsReferenced)
+
+# Query 16: Cross-phase connectivity
+# Description: Identifies entities that connect multiple phases
+SELECT ?entity ?entityType 
+    (COUNT(DISTINCT ?connection) AS ?crossPhaseConnections)
+WHERE {
+    {
+        ?entity rdf:type :Reflexivity .
+        BIND("Reflexivity" AS ?entityType)
+        ?question :isReformulated ?entity .
+        BIND(?question AS ?connection)
+    } UNION {
+        ?entity rdf:type :Reflexivity .
+        BIND("Reflexivity" AS ?entityType)
+        ?entity :giveResponseTo ?report .
+        BIND(?report AS ?connection)
+    } UNION {
+        ?entity rdf:type :Interpretation .
+        BIND("Interpretation" AS ?entityType)
+        ?record :isInterpreted ?entity .
+        BIND(?record AS ?connection)
+    } UNION {
+        ?entity rdf:type :Interpretation .
+        BIND("Interpretation" AS ?entityType)
+        ?entity :hasCodes ?code .
+        BIND(?code AS ?connection)
+    }
+}
+GROUP BY ?entity ?entityType
+HAVING (COUNT(DISTINCT ?connection) > 1)
+ORDER BY DESC(?crossPhaseConnections)
+
+# Query 17: Research maturity index
+# Description: Calculates a maturity score for research projects
+SELECT ?project 
+    ((?hasObjective + ?hasResearcher + ?hasQuestion + ?hasRecord + ?hasInterpretation + ?hasCode + ?hasReport) AS ?maturityScore)
+WHERE {
+    ?project rdf:type :ResearchProject .
+    BIND(IF(BOUND(?objective), 1, 0) AS ?hasObjective)
+    BIND(IF(BOUND(?researcher), 1, 0) AS ?hasResearcher)
+    BIND(IF(BOUND(?question), 1, 0) AS ?hasQuestion)
+    BIND(IF(BOUND(?record), 1, 0) AS ?hasRecord)
+    BIND(IF(BOUND(?interpretation), 1, 0) AS ?hasInterpretation)
+    BIND(IF(BOUND(?code), 1, 0) AS ?hasCode)
+    BIND(IF(BOUND(?report), 1, 0) AS ?hasReport)
+    OPTIONAL { ?project :hasObjective ?objective }
+    OPTIONAL { ?project :hasResearcher ?researcher }
+    OPTIONAL { ?objective :poses ?question }
+    OPTIONAL { ?record rdf:type/rdfs:subClassOf* :Record }
+    OPTIONAL { ?record :isInterpreted ?interpretation }
+    OPTIONAL { ?interpretation :hasCodes ?code }
+    OPTIONAL { ?report rdf:type :Report }
+}
+GROUP BY ?project
+ORDER BY DESC(?maturityScore)
+
