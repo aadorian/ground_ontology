@@ -444,6 +444,13 @@
         <hasElaboratedAnalyticCategory rdf:resource="http://www.semanticweb.org/grounded_research_ontology#DescriptiveCategory_SocialEnvironment"/>
     </owl:NamedIndividual>
     
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory_BehavioralPatterns">
+        <rdf:type rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory"/>
+        <rdfs:label>Behavioral Patterns</rdfs:label>
+        <hasRelativeAnalyticCategory rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory_MotivationFactors"/>
+        <hasRelativeAnalyticCategory rdf:resource="http://www.semanticweb.org/grounded_research_ontology#AnalyticCategory_ContextualFactors"/>
+    </owl:NamedIndividual>
+    
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/grounded_research_ontology#CoreCategory_MotivationDynamics">
         <rdf:type rdf:resource="http://www.semanticweb.org/grounded_research_ontology#CoreCategory"/>
         <rdfs:label>Motivation Dynamics</rdfs:label>
